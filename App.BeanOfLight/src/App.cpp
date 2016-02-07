@@ -36,13 +36,24 @@ void App::setupScene()
 	OgreFramework::getSingletonPtr()->m_pSceneMgr->setSkyBox(true, "Examples/EarlyMorningSkyBox");
 	OgreFramework::getSingletonPtr()->m_pSceneMgr->createLight("Light")->setPosition(5600, 400, 5600);
 
-	Ogre::SceneNode* ogreNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
-	ogreNode->setPosition(5400, 150, 5400);
+	Ogre::SceneNode* cubeNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
+	cubeNode->setPosition(5400, 150, 5400);
 	ProceduralShape::createCube(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		ogreNode,
+		cubeNode,
 		Ogre::String("MyCube"),
 		100.f);
+
+	Ogre::SceneNode* avatarNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
+	avatarNode->setPosition(6400, 90, 5400);
+	avatarNode->pitch(Ogre::Degree(-90));
+	avatarNode->roll(Ogre::Degree(90));
+	ProceduralShape::createAvatar(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		avatarNode,
+		Ogre::String("MyAvatar"),
+		180.f, 70.f, 40.f, 60.f, 10.f, 10.f);
+
 }
 
 void App::run()

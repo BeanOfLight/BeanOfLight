@@ -12,8 +12,16 @@ public:
 		Ogre::String& i_name,
 		float i_size);
 
-	//static Ogre::ManualObject* createBlock(float i_sizeX, float i_sizeY, float i_sizeZ);
-	//static Ogre::ManualObject* createAvatar(float i_sizeX, float i_sizeY, float i_sizeZ);
+	static Ogre::ManualObject* createAvatar(
+		Ogre::SceneManager* i_pSceneMngr,
+		Ogre::SceneNode* i_pParent,
+		Ogre::String& i_name,
+		float i_height,
+		float i_width,
+		float i_depth,
+		float i_sameHeight,
+		float i_seamWidth,
+		float i_resolution);
 };
 
 
