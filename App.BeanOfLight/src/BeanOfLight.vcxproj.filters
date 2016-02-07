@@ -13,6 +13,9 @@
     <ClCompile Include="TerrainCreator.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="ProceduralShape.cpp">
+      <Filter>Procedural</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -23,6 +26,9 @@
     </ClInclude>
     <ClInclude Include="TerrainCreator.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralShape.h">
+      <Filter>Procedural</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +43,9 @@
     </None>
     <None Include="resources.cfg">
       <Filter>Resources</Filter>
+    </None>
+    <None Include="Media\BeanOfLight.material">
+      <Filter>Resources\Media</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +62,12 @@
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{7f444763-3edc-490f-9592-18a1a591ca4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Procedural">
+      <UniqueIdentifier>{18ba156d-2a16-4947-8f99-ff87074c93e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Media">
+      <UniqueIdentifier>{9ab10030-2ce0-431a-8a93-965474dac873}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

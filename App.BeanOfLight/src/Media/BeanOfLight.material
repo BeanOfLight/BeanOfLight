@@ -1,0 +1,14 @@
+material BeanOfLight/Blue
+{
+	technique
+	{
+		pass
+		{
+			shading flat
+			ambient 0.0 0.0 0.0
+            diffuse 0.1 0.1 0.5
+		}
+	}
+}
+
+

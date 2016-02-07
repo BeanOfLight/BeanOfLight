@@ -83,7 +83,8 @@
       <Command>call CopyOgre.cmd $(SolutionName).$(PlatformToolset) $(Configuration)
 copy plugins_d.cfg $(outdir)
 copy resources.cfg $(outdir)
-xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformToolset)\media</Command>
+xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformToolset)\media
+xcopy /s /i /y /q .\Media $(outdir)..\Media</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,7 +112,8 @@ xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformTool
       <Command>call CopyOgre.cmd $(SolutionName).$(PlatformToolset) $(Configuration)
 copy plugins.cfg $(outdir)
 copy resources.cfg $(outdir)
-xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformToolset)\media</Command>
+xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformToolset)\media
+xcopy /s /i /y /q .\Media $(outdir)..\Media</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -127,6 +129,7 @@ xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformTool
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="ProceduralShape.cpp" />
     <ClCompile Include="TerrainCreator.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -141,6 +144,7 @@ xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformTool
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="ProceduralShape.h" />
     <ClInclude Include="TerrainCreator.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -150,6 +154,9 @@ xcopy /s /i /y /q $(OGRE_HOME)\media ..\..\Output.$(SolutionName).$(PlatformTool
     <None Include="CopyOgre.cmd">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Media\BeanOfLight.material">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>
     <None Include="plugins.cfg">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

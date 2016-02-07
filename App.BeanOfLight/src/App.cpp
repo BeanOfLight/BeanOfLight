@@ -1,5 +1,7 @@
 #include "App.h"
 
+#include "ProceduralShape.h"
+
 #include <OgreLight.h>
 #include <OgreWindowEventUtilities.h>
 
@@ -33,6 +35,14 @@ void App::setupScene()
 {
 	OgreFramework::getSingletonPtr()->m_pSceneMgr->setSkyBox(true, "Examples/EarlyMorningSkyBox");
 	OgreFramework::getSingletonPtr()->m_pSceneMgr->createLight("Light")->setPosition(75,75,75);
+
+	Ogre::SceneNode* ogreNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
+	ogreNode->setPosition(5400, 150, 5400);
+	ProceduralShape::createCube(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		ogreNode,
+		Ogre::String("MyCube"),
+		100.f);
 }
 
 void App::run()
