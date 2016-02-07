@@ -1,7 +1,8 @@
 #VS Files
 .suo
-.filters
-.user
+.sdf
+vcxproj.filters
+vcxproj.user
 
 #Others
 .log
