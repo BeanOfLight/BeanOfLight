@@ -4,9 +4,17 @@ material BeanOfLight/Blue
 	{
 		pass
 		{
-			shading flat
-			ambient 0.0 0.0 0.0
-            diffuse 0.1 0.1 0.5
+		    lighting on
+
+			shading phong
+			ambient 0.1 0.1 0.1
+            diffuse 0.6 0.6 0.6
+			specular 1.0 1.0 1.0 12.5
+			
+			texture_unit
+			{
+				texture checker.png
+			}
 		}
 	}
 }

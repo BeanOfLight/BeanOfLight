@@ -34,7 +34,7 @@ void App::start()
 void App::setupScene()
 {
 	OgreFramework::getSingletonPtr()->m_pSceneMgr->setSkyBox(true, "Examples/EarlyMorningSkyBox");
-	OgreFramework::getSingletonPtr()->m_pSceneMgr->createLight("Light")->setPosition(75,75,75);
+	OgreFramework::getSingletonPtr()->m_pSceneMgr->createLight("Light")->setPosition(5600, 400, 5600);
 
 	Ogre::SceneNode* ogreNode = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
 	ogreNode->setPosition(5400, 150, 5400);

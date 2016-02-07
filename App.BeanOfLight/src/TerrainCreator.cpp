@@ -19,7 +19,7 @@ TerrainCreator::~TerrainCreator()
 Ogre::TerrainGroup* TerrainCreator::initTerrain(Ogre::SceneManager& i_sceneManager)
 {
 	// Terrain
-	Ogre::Vector3 lightdir(0.0f, -0.3f, -1.0f);
+	Ogre::Vector3 lightdir(0.1f, -0.3f, -1.0f);
 	lightdir.normalise();
 
 	Ogre::Light* light = i_sceneManager.createLight("TestLight");

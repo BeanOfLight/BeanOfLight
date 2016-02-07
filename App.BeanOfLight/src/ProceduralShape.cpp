@@ -82,27 +82,54 @@ Ogre::ManualObject* ProceduralShape::createCube(
 
 	// define start and end point
 	float &s = i_size;
-	std::vector<Ogre::Vector3> p;
-	p.push_back(Ogre::Vector3(s, -s, -s));
-	p.push_back(Ogre::Vector3(s, s, -s));
-	p.push_back(Ogre::Vector3(-s, s, -s));
-	p.push_back(Ogre::Vector3(-s, -s, -s));
-	p.push_back(Ogre::Vector3(s, -s, s));
-	p.push_back(Ogre::Vector3(s, s, s));
-	p.push_back(Ogre::Vector3(-s, s, s));
-	p.push_back(Ogre::Vector3(-s, -s, s));
+	std::vector<Ogre::Vector3> p{
+		Ogre::Vector3(s, -s, -s), 
+		Ogre::Vector3(s, s, -s),
+		Ogre::Vector3(-s, s, -s),
+		Ogre::Vector3(-s, -s, -s),
+		Ogre::Vector3(s, -s, s),
+		Ogre::Vector3(s, s, s),
+		Ogre::Vector3(-s, s, s),
+		Ogre::Vector3(-s, -s, s)
+	};
 
-	std::vector<std::vector<int>> v{ { 0,3,1,2 },{ 1,2,5,6 },{2,3,6,7},{3,0,7,4},{0,1,4,5},{4,5,7,6} };
+	std::vector<std::vector<int>> f{ 
+		{ 0,3,1,2 },
+		{ 1,2,5,6 },
+		{ 2,3,6,7 },
+		{ 3,0,7,4 },
+		{ 0,1,4,5 },
+		{ 4,5,7,6 }
+	};
+	std::vector<Ogre::Vector3> n{
+		Ogre::Vector3(0.f, 0.f, -1.f),
+		Ogre::Vector3(0.f, 1.f, 0.f),
+		Ogre::Vector3(-1.f, 0.f, 0.f),
+		Ogre::Vector3(0.f, -1.f, 0.f),
+		Ogre::Vector3(1.f, 0.f, 0.f),
+		Ogre::Vector3(0.f, 0.f, 1.f),
+	};
+	std::vector<Ogre::Vector2> t{
+		Ogre::Vector2(0.f, 0.f),
+		Ogre::Vector2(0.f, 1.f),
+		Ogre::Vector2(1.f, 0.f),
+		Ogre::Vector2(1.f, 1.f)
+	};
 
-	for (size_t i = 0; i < v.size(); ++i)
+
+
+	for (size_t i = 0; i < f.size(); ++i)
 	{
 		manual->begin("BeanOfLight/Blue", Ogre::RenderOperation::OT_TRIANGLE_STRIP);
-		for (size_t j = 0; j < v[i].size(); ++j)
-			manual->position(p[v[i][j]].x, p[v[i][j]].y, p[v[i][j]].z);
+		for (size_t j = 0; j < f[i].size(); ++j)
+		{
+			manual->position(p[f[i][j]].x, p[f[i][j]].y, p[f[i][j]].z);
+			manual->normal(n[i].x, n[i].y, n[i].z);
+			manual->textureCoord(t[j].x, t[j].y);
+		}
 		manual->end();
 	}
 
-	// add ManualObject to the RootSceneNode (so it will be visible)
 	i_pParent->attachObject(manual);
 
 	return manual;
