@@ -1,9 +1,9 @@
 #VS Files
-.suo
-.sdf
-.vcxproj.filters
-.vcxproj.user
+*.suo
+*.sdf
+*.opendb
+*.v140/
 
 #Others
-.log
+*.log
 

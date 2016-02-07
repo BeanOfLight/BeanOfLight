@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="App.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainCreator.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainCreator.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CopyOgre.cmd">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="plugins.cfg">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="plugins_d.cfg">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="resources.cfg">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="OgreResourceDebug.BeanOfLight.v140.txt">
+      <Filter>Resources</Filter>
+    </Text>
+    <Text Include="OgreResourceRelease.BeanOfLight.v140.txt">
+      <Filter>Resources</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{11ed4615-9a9c-4482-887a-3a6e192fe6e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{7f444763-3edc-490f-9592-18a1a591ca4e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
