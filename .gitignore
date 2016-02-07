@@ -1,1 +1,8 @@
+#VS Files
 .suo
+.filters
+.user
+
+#Others
+.log
+
