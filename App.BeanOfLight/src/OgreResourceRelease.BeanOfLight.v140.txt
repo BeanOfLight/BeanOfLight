@@ -1,0 +1,17 @@
+bin\Release\cg.dll
+bin\Release\OgreMain.dll
+bin\Release\OgreOverlay.dll
+bin\Release\OgreTerrain.dll
+bin\Release\OgrePaging.dll
+bin\Release\OIS.dll
+bin\Release\Plugin_BSPSceneManager.dll
+bin\Release\Plugin_CgProgramManager.dll
+bin\Release\Plugin_OctreeSceneManager.dll
+bin\Release\Plugin_OctreeZone.dll
+bin\Release\Plugin_ParticleFX.dll
+bin\Release\Plugin_PCZSceneManager.dll
+
+bin\Release\RenderSystem_GL.dll
+bin\Release\RenderSystem_GL3Plus.dll
+bin\Release\RenderSystem_Direct3D11.dll
+

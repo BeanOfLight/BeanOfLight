@@ -1,0 +1,16 @@
+bin\Debug\cg.dll
+bin\Debug\OgreMain_d.dll
+bin\Debug\OgreOverlay_d.dll
+bin\debug\OgreTerrain_d.dll
+bin\debug\OgrePaging_d.dll
+bin\Debug\OIS_d.dll
+bin\Debug\Plugin_BSPSceneManager_d.dll
+bin\Debug\Plugin_CgProgramManager_d.dll
+bin\Debug\Plugin_OctreeSceneManager_d.dll
+bin\Debug\Plugin_OctreeZone_d.dll
+bin\Debug\Plugin_ParticleFX_d.dll
+bin\Debug\Plugin_PCZSceneManager_d.dll
+
+bin\Debug\RenderSystem_GL_d.dll
+bin\Debug\RenderSystem_GL3Plus_d.dll
+bin\Debug\RenderSystem_Direct3D11_d.dll
