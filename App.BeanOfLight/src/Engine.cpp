@@ -144,7 +144,7 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 
 	m_pAvatarControler = new AvatarControler();
 	m_pAvatarControler->attachAvatar(m_pAvatar, avatarHeightOffset);
-	m_pAvatarControler->attachCamera(m_pCamera);
+	m_pAvatarControler->attachCamera(m_pCamera, avatarHeightOffset);
 	m_pAvatarControler->attachTerrain(mTerrainGroup);
 	m_pAvatarControler->alignAvatarToCamera();
 
@@ -225,9 +225,6 @@ bool OgreFramework::keyReleased(const OIS::KeyEvent &keyEventRef)
 
 bool OgreFramework::mouseMoved(const OIS::MouseEvent &evt)
 {
-	//m_pCamera->yaw(Degree(evt.state.X.rel * -0.1f));
-	//m_pCamera->pitch(Degree(evt.state.Y.rel * -0.1f));
-
 	m_pAvatarControler->orient(evt.state.X.rel, evt.state.Y.rel);
 
 	return true;
@@ -280,17 +277,4 @@ void OgreFramework::moveAvatar(double i_timeSinceLastFrame)
 		run = true;
 
 	m_pAvatarControler->move(moveForward, straffe, i_timeSinceLastFrame, run);
-
-	setCameraOnTerrain();
-}
-
-void OgreFramework::setCameraOnTerrain()
-{
-	//Ogre::Vector3 camPos = m_pCamera->getPosition();
-	//Ogre::Ray cameraRay(Ogre::Vector3(camPos.x, 5000.0f, camPos.z), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	//Ogre::TerrainGroup::RayResult rayResult = mTerrainGroup->rayIntersects(cameraRay);
-	//if (rayResult.hit)
-	//{
-	//	m_pCamera->setPosition(camPos.x, rayResult.position.y + 150.0f, camPos.z);
-	//}
 }

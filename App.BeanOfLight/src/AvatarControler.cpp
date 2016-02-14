@@ -13,6 +13,7 @@ AvatarControler::AvatarControler()
 	m_camDistance(camDist),
 	m_angularSpeed(0.0015f),
 	m_pCamera(nullptr),
+	m_cameraHeightOffset(0.f),
 	m_pAvatar(nullptr),
 	m_avatarHeightOffset(0.f),
 	m_pTerrainGroup(nullptr)
@@ -36,9 +37,10 @@ void AvatarControler::detachAvatar()
 	m_pAvatar = nullptr;
 }
 
-void AvatarControler::attachCamera(Ogre::Camera* i_pCamera)
+void AvatarControler::attachCamera(Ogre::Camera* i_pCamera, float i_heightOffset)
 {
 	m_pCamera = i_pCamera;
+	m_cameraHeightOffset = i_heightOffset;
 
 	if (!(m_pAvatar != nullptr && m_pCamera != nullptr))
 		return;
@@ -106,21 +108,16 @@ void AvatarControler::move(int i_frontDir, int i_sideDir, double i_timeSinceLast
 
 	Ogre::Vector3 moveDir = (avaX + avaY).normalisedCopy();
 	float speed = i_run ? m_runSpeed : m_waklSpeed;
-	Ogre::Vector3 move = moveDir * speed * (float) i_timeSinceLastFrame / 1000.f;
+	
+	Ogre::Vector3 oldAvaPos = m_pAvatar->getPosition();
+	Ogre::Vector3 newAvaPos = oldAvaPos + moveDir * speed * (float) i_timeSinceLastFrame / 1000.f;
+	newAvaPos = m_collideWithTerrain(newAvaPos, m_avatarHeightOffset, true);
+	m_pAvatar->setPosition(newAvaPos);
 
-	if (m_pTerrainGroup)
-	{
-		Ogre::Vector3 pos = m_pAvatar->getPosition() + move;
-		Ogre::Ray ray(Ogre::Vector3(pos.x, 5000.0f, pos.z), Ogre::Vector3::NEGATIVE_UNIT_Y);
-		Ogre::TerrainGroup::RayResult newPos = m_pTerrainGroup->rayIntersects(ray);
-		if (newPos.hit)
-		{
-			move += newPos.position - pos + m_avatarHeightOffset * Ogre::Vector3::UNIT_Y;
-		}
-	}
-
-	m_pAvatar->setPosition(m_pAvatar->getPosition() + move);
-	m_pCamera->setPosition(m_pCamera->getPosition() + move);
+	Ogre::Vector3 newCamPos = m_pCamera->getPosition() + newAvaPos - oldAvaPos;
+	newCamPos = m_collideWithTerrain(newCamPos, m_cameraHeightOffset, false);
+	m_pCamera->setPosition(newCamPos);
+	m_pCamera->lookAt(newAvaPos);
 }
 
 void AvatarControler::orient(int i_xRel, int i_yRel)
@@ -134,6 +131,10 @@ void AvatarControler::orient(int i_xRel, int i_yRel)
 	Ogre::Radian angleY(i_yRel * -m_angularSpeed);
 
 	Ogre::Vector3 avatarToCamera = m_pCamera->getPosition() - m_pAvatar->getPosition();
+
+	// restore lenght if it is too low
+	if (avatarToCamera.length() != m_camDistance)
+		avatarToCamera = avatarToCamera.normalisedCopy() * m_camDistance;
 	
 	// Do not go to the poles
 	Ogre::Radian latitude = m_pAvatar->getOrientation().zAxis().angleBetween(avatarToCamera);
@@ -144,9 +145,32 @@ void AvatarControler::orient(int i_xRel, int i_yRel)
 
 	Ogre::Quaternion orient = Ogre::Quaternion(angleY, m_pCamera->getOrientation().xAxis()) * Ogre::Quaternion(angleX, m_pCamera->getOrientation().yAxis());
 	
-	m_pCamera->setPosition(m_pAvatar->getPosition() + orient * avatarToCamera);
+	Ogre::Vector3 newCamPos = m_pAvatar->getPosition() + orient * avatarToCamera;
+	newCamPos = m_collideWithTerrain(newCamPos, m_cameraHeightOffset, false);
+	m_pCamera->setPosition(newCamPos);
 	m_pCamera->lookAt(m_pAvatar->getPosition());
 
 	if (!m_lookAround)
 		alignAvatarToCamera();
+}
+
+Ogre::Vector3 AvatarControler::m_collideWithTerrain(const Ogre::Vector3& i_pos, float i_offset, bool i_stick)
+{
+	if (!m_pTerrainGroup)
+		return i_pos;
+
+	// Avatar stands on terrain
+	Ogre::Ray ray(Ogre::Vector3(i_pos.x, 5000.0f, i_pos.z), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::TerrainGroup::RayResult newPos = m_pTerrainGroup->rayIntersects(ray);
+		
+	if (!newPos.hit)
+		return i_pos;; // not terrain collision
+
+	newPos.position.y += i_offset; // account for offset
+
+	if (!i_stick && (newPos.position.y < i_pos.y))
+		return i_pos; // object is above terrain
+
+	return newPos.position;
+
 }

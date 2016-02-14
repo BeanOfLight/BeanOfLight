@@ -59,8 +59,6 @@ private:
 	OgreFramework(const OgreFramework&);
 	OgreFramework& operator= (const OgreFramework&);
 
-	void setCameraOnTerrain();
-
 	OgreBites::SdkTrayManager*	m_pTrayMgr;
     Ogre::FrameEvent            m_FrameEvent;
 	int							m_iNumScreenShots;

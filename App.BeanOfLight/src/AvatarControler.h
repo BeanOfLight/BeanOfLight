@@ -15,7 +15,7 @@ public:
 	void attachAvatar(Ogre::SceneNode* i_pAvatar, float i_heightOffset);
 	void detachAvatar();
 
-	void attachCamera(Ogre::Camera* i_pCamera); // Avatar must be attached first
+	void attachCamera(Ogre::Camera* i_pCamera, float i_heightOffset); // Avatar must be attached first
 	void detachCamera();
 
 	void attachTerrain(Ogre::TerrainGroup* i_pTerrainGroup);
@@ -38,7 +38,11 @@ public:
 
 private:
 
+	Ogre::Vector3 m_collideWithTerrain(const Ogre::Vector3& i_pos, float i_offset, bool i_stick);
+
+
 	Ogre::Camera* m_pCamera;
+	float m_cameraHeightOffset;
 	Ogre::SceneNode* m_pAvatar;
 	float m_avatarHeightOffset;
 	Ogre::TerrainGroup* m_pTerrainGroup;
