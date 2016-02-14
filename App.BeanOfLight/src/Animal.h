@@ -11,6 +11,9 @@ public:
 	Animal();
 	virtual ~Animal();
 
+	// Initialize animal position so it does not collide with terrain
+	void dropOnTerrain(Ogre::TerrainGroup& i_terrain);
+
 	// Move the animal
 	// set i_forward to 1 for forward
 	// set i_forward to -1 for backwards

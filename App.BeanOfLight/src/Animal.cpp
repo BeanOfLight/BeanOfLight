@@ -11,6 +11,13 @@ Animal::~Animal()
 {
 }
 
+void Animal::dropOnTerrain(Ogre::TerrainGroup& i_terrain)
+{
+	Ogre::Vector3 oldPos = m_pNode->getPosition();
+	Ogre::Vector3 newPos = collideWithTerrain(oldPos, m_heightOffset, m_stuckToTerrain, i_terrain);
+	m_pNode->setPosition(newPos);
+}
+
 void Animal::moveOnTerrain(int i_moveForward, int i_straffeLeft, bool i_run, double i_timeSinceLastCall, Ogre::TerrainGroup& i_terrain)
 {
 	if (i_timeSinceLastCall < std::numeric_limits<double>::epsilon())
@@ -43,7 +50,7 @@ void Animal::moveOnTerrain(int i_moveForward, int i_straffeLeft, bool i_run, dou
 
 	Ogre::Vector3 oldPos = m_pNode->getPosition();
 	Ogre::Vector3 newPos = oldPos + moveDir * speedFactor;
-	newPos = collideWithTerrain(newPos, m_heightOffset, true, i_terrain);
+	newPos = collideWithTerrain(newPos, m_heightOffset, m_stuckToTerrain, i_terrain);
 
 	// Adjust speed for slope
 	newPos = oldPos + (newPos - oldPos).normalisedCopy() * speedFactor;

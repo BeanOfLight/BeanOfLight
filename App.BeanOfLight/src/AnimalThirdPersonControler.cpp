@@ -33,9 +33,12 @@ void AnimalThirdPersonControler::attach(Animal* i_pAnimal, Ogre::Camera* i_pCame
 	if (!(m_pAnimal != nullptr && m_pCamera != nullptr))
 		return;
 
+	m_pAnimal->dropOnTerrain(*i_pTerrainGroup);
+
 	// Position camera
 	m_pCamera->setPosition(m_pAnimal->m_pNode->getPosition() - m_camDistance * m_pAnimal->m_pNode->getOrientation().xAxis());
 	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition() );
+
 }
 
 void AnimalThirdPersonControler::detach()

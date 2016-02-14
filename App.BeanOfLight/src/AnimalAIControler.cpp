@@ -4,6 +4,7 @@
 
 float stopDistance = 100.f; // cm;
 float visionRadius = 4000.f; // cm
+float visionHalfAngle = Ogre::Math::PI / 4.f; // radians
 
 AnimalAIControler::AnimalAIControler()
 	: m_pAnimal(nullptr),
@@ -24,6 +25,8 @@ void AnimalAIControler::attach(Animal* i_pAnimal, Animal* i_pHero, Ogre::Terrain
 
 	if (!(m_pAnimal != nullptr && m_pTerrainGroup != nullptr))
 		return;
+
+	m_pAnimal->dropOnTerrain(*i_pTerrainGroup);
 }
 
 void AnimalAIControler::detach()
@@ -50,10 +53,11 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 		std::rotate(m_wayPoints.begin(), m_wayPoints.begin() + 1, m_wayPoints.end());
 	}
 
-	// If the player is near, turn towards the player
+	// If the player is visible (near and in front), turn towards the player
 	Ogre::Vector3 animalToHero = m_pHero->m_pNode->getPosition() - m_pAnimal->m_pNode->getPosition();
 	Ogre::Real distanceToHero = animalToHero.length();
-	if(distanceToHero < visionRadius)
+	Ogre::Radian angleToHero = animalToHero.angleBetween(m_pAnimal->m_pNode->getOrientation().xAxis());
+	if(distanceToHero < visionRadius && angleToHero.valueRadians() < visionHalfAngle)
 	{ 
 		if (distanceToHero < stopDistance)
 			return;

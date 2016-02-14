@@ -128,7 +128,7 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	// Create Avatar & third person controler
 	m_pAvatar = AnimalFactory::createHeroBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(6400, 90.f, 5400),
+		Ogre::Vector3(6400, 0.f, 5400),
 		Ogre::Quaternion::IDENTITY,
 		Ogre::String("MyAvatar"));
 	m_pAvatarControler = new AnimalThirdPersonControler();
@@ -138,7 +138,7 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	// Create a peon & AI controler
 	m_pPeon = AnimalFactory::createPeonBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(5000, 85.f, -4000),
+		Ogre::Vector3(5000, 0.f, -4000),
 		Ogre::Quaternion::IDENTITY,
 		Ogre::String("Peon1"));
 	m_pPeonControler = new AnimalAIControler();
