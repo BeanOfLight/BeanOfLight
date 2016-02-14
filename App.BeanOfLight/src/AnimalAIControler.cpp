@@ -9,7 +9,8 @@ float visionHalfAngle = Ogre::Math::PI / 4.f; // radians
 AnimalAIControler::AnimalAIControler()
 	: m_pAnimal(nullptr),
 	m_pTerrainGroup(nullptr),
-	m_pHero(nullptr)
+	m_pHero(nullptr),
+	m_huntHero(true)
 {
 }
 
@@ -57,7 +58,7 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 	Ogre::Vector3 animalToHero = m_pHero->m_pNode->getPosition() - m_pAnimal->m_pNode->getPosition();
 	Ogre::Real distanceToHero = animalToHero.length();
 	Ogre::Radian angleToHero = animalToHero.angleBetween(m_pAnimal->m_pNode->getOrientation().xAxis());
-	if(distanceToHero < visionRadius && angleToHero.valueRadians() < visionHalfAngle)
+	if(m_huntHero && distanceToHero < visionRadius && angleToHero.valueRadians() < visionHalfAngle)
 	{ 
 		if (distanceToHero < stopDistance)
 			return;

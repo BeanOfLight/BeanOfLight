@@ -12,8 +12,11 @@ public:
 	void attach(Animal* i_pAnimal, Animal* i_pHero, Ogre::TerrainGroup* i_pTerrainGroup);
 	void detach();
 
-	// Change state
+	// Configure
 	void setWayPoints(std::vector<Ogre::Vector3> i_wayPoints); // place waypoints on the terrain
+	bool m_huntHero;
+
+	// Action
 	void move(double i_timeSinceLastFrame);
 
 private:
