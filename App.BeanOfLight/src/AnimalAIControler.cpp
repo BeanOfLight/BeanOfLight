@@ -10,7 +10,8 @@ AnimalAIControler::AnimalAIControler()
 	: m_pAnimal(nullptr),
 	m_pTerrainGroup(nullptr),
 	m_pHero(nullptr),
-	m_huntHero(true)
+	m_huntHero(true),
+	m_isAlerted(false)
 {
 }
 
@@ -54,12 +55,26 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 		std::rotate(m_wayPoints.begin(), m_wayPoints.begin() + 1, m_wayPoints.end());
 	}
 
-	// If the player is visible (near and in front), turn towards the player
-	Ogre::Vector3 animalToHero = m_pHero->m_pNode->getPosition() - m_pAnimal->m_pNode->getPosition();
-	Ogre::Real distanceToHero = animalToHero.length();
-	Ogre::Radian angleToHero = animalToHero.angleBetween(m_pAnimal->m_pNode->getOrientation().xAxis());
-	if(m_huntHero && distanceToHero < visionRadius && angleToHero.valueRadians() < visionHalfAngle)
-	{ 
+	bool isHeroDetected = false;
+	Ogre::Vector3 animalToHero;
+	Ogre::Real distanceToHero = 0.f;
+	if (m_huntHero)
+	{
+		animalToHero = m_pHero->m_pNode->getPosition() - m_pAnimal->m_pNode->getPosition();
+		distanceToHero = animalToHero.length();
+		Ogre::Radian angleToHero = animalToHero.angleBetween(m_pAnimal->m_pNode->getOrientation().xAxis());
+
+		if (!m_isAlerted && distanceToHero < visionRadius && angleToHero.valueRadians() < visionHalfAngle)
+			// Detect hero if not alerted and hero is in field of view
+			isHeroDetected = true;
+		else if (m_isAlerted && distanceToHero < visionRadius)
+			// Detect hero if alerted and hero is nearby
+			isHeroDetected = true;
+	}
+
+	if (isHeroDetected)
+	{
+		m_isAlerted = true;
 		if (distanceToHero < stopDistance)
 			return;
 		else
@@ -70,6 +85,7 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 	}
 	else
 	{
+		m_isAlerted = false;
 		Ogre::Vector3 animalToWaypoint = m_wayPoints[0] - m_pAnimal->m_pNode->getPosition();
 		Ogre::Real distanceToWayPoint = animalToWaypoint.length();
 		if (distanceToWayPoint < stopDistance)

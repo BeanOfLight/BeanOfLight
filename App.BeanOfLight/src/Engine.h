@@ -59,6 +59,9 @@ public:
 	Animal*						m_pPeon;
 	AnimalAIControler*			m_pPeonControler;
 
+	Animal*						m_pGuard;
+	AnimalAIControler*			m_pGuardControler;
+
 private:
 	OgreFramework(const OgreFramework&);
 	OgreFramework& operator= (const OgreFramework&);

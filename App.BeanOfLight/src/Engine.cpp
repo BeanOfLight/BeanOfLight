@@ -18,7 +18,6 @@ OgreFramework::OgreFramework()
     m_pSceneMgr			= 0;
     m_pRenderWnd		= 0;
     m_pCamera			= 0;
-	m_pAvatar           = 0;
     m_pViewport			= 0;
     m_pLog				= 0;
     m_pTimer			= 0;
@@ -29,6 +28,13 @@ OgreFramework::OgreFramework()
 
     m_pTrayMgr          = 0;
     m_FrameEvent        = Ogre::FrameEvent();
+
+	m_pAvatar = 0;
+	m_pAvatarControler = 0;
+	m_pGuard = 0;
+	m_pGuardControler = 0;
+	m_pPeon = 0;
+	m_pPeonControler = 0;
 
 	m_timeSinceLastFrame = 0.f;
 }
@@ -134,6 +140,22 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	m_pAvatarControler = new AnimalThirdPersonControler();
 	m_pAvatarControler->attach(m_pAvatar, m_pCamera, m_pTerrainGroup);
 
+	// Create a guard & AI controler
+	m_pGuard = AnimalFactory::createGuardBean(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		Ogre::Vector3(5000, 0.f, -5000),
+		Ogre::Quaternion::IDENTITY,
+		Ogre::String("Guard1"));
+	m_pGuardControler = new AnimalAIControler();
+	m_pGuardControler->attach(m_pGuard, m_pAvatar, m_pTerrainGroup);
+	std::vector<Ogre::Vector3> wg{
+		Ogre::Vector3(10800.f, 0.f, -10800.f),
+		Ogre::Vector3(10800.f, 0.f, 0.f),
+		Ogre::Vector3(0.f, 0.f, 0.f),
+		Ogre::Vector3(0.f, 0.f, -10800.f)
+	};
+	m_pGuardControler->setWayPoints(wg);
+	m_pGuardControler->m_huntHero = true;
 
 	// Create a peon & AI controler
 	m_pPeon = AnimalFactory::createPeonBean(
@@ -143,13 +165,14 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 		Ogre::String("Peon1"));
 	m_pPeonControler = new AnimalAIControler();
 	m_pPeonControler->attach(m_pPeon, m_pAvatar, m_pTerrainGroup);
-	std::vector<Ogre::Vector3> w{
+	std::vector<Ogre::Vector3> wp{
 		Ogre::Vector3(0.f, 0.f, 0.f),
 		Ogre::Vector3(0.f, 0.f, -12800.f),
 		Ogre::Vector3(12800.f, 0.f, -12800.f),
 		Ogre::Vector3(12800.f, 0.f, 0.f)
 	};
-	m_pPeonControler->setWayPoints(w);
+	m_pPeonControler->setWayPoints(wp);
+	m_pPeonControler->m_huntHero = false;
 
     return true;
 }
@@ -252,6 +275,7 @@ void OgreFramework::updateOgre(double timeSinceLastFrame)
     m_TranslateVector = Vector3::ZERO;
 
 	m_pPeonControler->move(m_timeSinceLastFrame);
+	m_pGuardControler->move(m_timeSinceLastFrame);
 	moveAvatar(m_timeSinceLastFrame);
 
     m_FrameEvent.timeSinceLastFrame = m_timeSinceLastFrame;
