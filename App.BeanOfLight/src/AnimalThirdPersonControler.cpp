@@ -68,17 +68,20 @@ void AnimalThirdPersonControler::move(int i_frontDir, int i_sideDir, bool i_run,
 	if (!(m_pAnimal != nullptr && m_pCamera != nullptr))
 		return;
 
-	if (i_frontDir == 0 && i_sideDir == 0)
-		return;
+	if (!(i_frontDir == 0 && i_sideDir == 0))
+	{
+		Ogre::Vector3 oldAniPos = m_pAnimal->m_pNode->getPosition();
+		m_pAnimal->moveOnTerrain(i_frontDir, i_sideDir, i_run, i_timeSinceLastFrame, *m_pTerrainGroup);
+		Ogre::Vector3 newAniPos = m_pAnimal->m_pNode->getPosition();
 
-	Ogre::Vector3 oldAniPos = m_pAnimal->m_pNode->getPosition();
-	m_pAnimal->moveOnTerrain(i_frontDir, i_sideDir, i_run, i_timeSinceLastFrame, *m_pTerrainGroup);
-	Ogre::Vector3 newAniPos = m_pAnimal->m_pNode->getPosition();
+		Ogre::Vector3 newCamPos = m_pCamera->getPosition() + newAniPos - oldAniPos;
+		newCamPos = collideWithTerrain(newCamPos, m_camHeightOffset, false, *m_pTerrainGroup);
+		m_pCamera->setPosition(newCamPos);
+		m_pCamera->lookAt(newAniPos);
+	}
 
-	Ogre::Vector3 newCamPos = m_pCamera->getPosition() + newAniPos - oldAniPos;
-	newCamPos = collideWithTerrain(newCamPos, m_camHeightOffset, false, *m_pTerrainGroup);
-	m_pCamera->setPosition(newCamPos);
-	m_pCamera->lookAt(newAniPos);
+	if (!m_lookAround)
+		alignAnimalToCamera(i_timeSinceLastFrame);
 }
 
 void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel, double i_timeSinceLastFrame)
@@ -110,7 +113,4 @@ void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel, double i_timeSin
 	newCamPos = collideWithTerrain(newCamPos, m_camHeightOffset, false, *m_pTerrainGroup);
 	m_pCamera->setPosition(newCamPos);
 	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition());
-
-	if (!m_lookAround)
-		alignAnimalToCamera(i_timeSinceLastFrame);
 }
