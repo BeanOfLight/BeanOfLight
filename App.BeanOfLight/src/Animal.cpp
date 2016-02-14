@@ -13,11 +13,15 @@ Animal::~Animal()
 
 void Animal::moveOnTerrain(int i_moveForward, int i_straffeLeft, bool i_run, double i_timeSinceLastCall, Ogre::TerrainGroup& i_terrain)
 {
+	if (i_timeSinceLastCall < std::numeric_limits<double>::epsilon())
+		return;
+
 	if (m_pNode == nullptr)
 		return;
 
 	if (i_moveForward == 0 && i_straffeLeft == 0)
 		return;
+
 
 	Ogre::Vector3 movX = Ogre::Vector3::ZERO;
 	Ogre::Vector3 movY = Ogre::Vector3::ZERO;
@@ -46,9 +50,27 @@ void Animal::moveOnTerrain(int i_moveForward, int i_straffeLeft, bool i_run, dou
 	m_pNode->setPosition(newPos);
 }
 
-void Animal::turn(Ogre::Vector3 i_newXDir)
+void Animal::turn(Ogre::Vector3 i_newXDir, double i_timeSinceLastCall)
 {
-	Ogre::Vector3 z = m_pNode->getOrientation().zAxis();
+	if (i_timeSinceLastCall < std::numeric_limits<double>::epsilon())
+		return;
+
+	Ogre::Quaternion curOrient = m_pNode->getOrientation();
+	Ogre::Vector3 x = curOrient.xAxis();
+	Ogre::Vector3 z = curOrient.zAxis();
+
+	// Ideal new X if we could turn at infinite speed
 	Ogre::Vector3 newX = Ogre::Vector3(i_newXDir.x, 0.f, i_newXDir.z).normalisedCopy();
-	m_pNode->setOrientation(Ogre::Quaternion(newX, z.crossProduct(newX), z));
+	Ogre::Quaternion finalOrient = Ogre::Quaternion(newX, z.crossProduct(newX), z);
+
+	Ogre::Radian angle = x.angleBetween(newX);
+
+	// Total time it will take to turn at max speed
+	float turnTimeSecs = float(angle.valueRadians()) / m_maxTurnSpeed;
+	float timeSecs = (float)i_timeSinceLastCall / 1000.f;
+
+	if (turnTimeSecs < timeSecs)
+		m_pNode->setOrientation(finalOrient);
+	else
+		m_pNode->setOrientation(Ogre::Quaternion::Slerp(Ogre::Real(timeSecs / turnTimeSecs), curOrient, finalOrient, true));
 }

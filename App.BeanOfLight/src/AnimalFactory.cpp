@@ -5,6 +5,7 @@
 
 const float walkSpeed = /*140.f*/ 650.f;
 const float runFactor = 4.f;
+const float turnSpeed = Ogre::Math::PI;
 
 Animal* AnimalFactory::createHeroBean(
 	Ogre::SceneManager* i_pSceneManager,
@@ -18,7 +19,7 @@ Animal* AnimalFactory::createHeroBean(
 	pHero->m_stuckToTerrain = true;
 	pHero->m_maxWaklSpeed = walkSpeed;
 	pHero->m_maxRunSpeed = walkSpeed * runFactor;
-	pHero->m_maxTurnSpeed = 0.f;
+	pHero->m_maxTurnSpeed = turnSpeed;
 
 	pHero->m_pNode = i_pSceneManager->getRootSceneNode()->createChildSceneNode();
 	pHero->m_pNode->setPosition(i_location.x, i_location.y, i_location.z);
@@ -54,7 +55,7 @@ Animal* AnimalFactory::createPeonBean(
 	pPeon->m_stuckToTerrain = true;
 	pPeon->m_maxWaklSpeed = walkSpeed * 0.8f;
 	pPeon->m_maxRunSpeed = walkSpeed * runFactor * 0.5f;
-	pPeon->m_maxTurnSpeed = 0.f;
+	pPeon->m_maxTurnSpeed = turnSpeed * 0.8f;
 
 	pPeon->m_pNode = i_pSceneManager->getRootSceneNode()->createChildSceneNode();
 	pPeon->m_pNode->setPosition(i_location.x, i_location.y, i_location.z);

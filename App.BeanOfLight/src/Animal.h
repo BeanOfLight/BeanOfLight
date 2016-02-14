@@ -17,7 +17,7 @@ public:
 	// set i_straffe to 1 for left
 	// set i_straffe to -1 for right
 	void moveOnTerrain(int i_forward, int i_straffeLeft, bool i_run, double i_timeSinceLastCall, Ogre::TerrainGroup& i_terrain);
-	void turn(Ogre::Vector3 i_newXDir);
+	void turn(Ogre::Vector3 i_newXDir, double i_timeSinceLastCall);
 
 	// Shape and body parts
 	// X is front

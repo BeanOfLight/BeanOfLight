@@ -75,6 +75,8 @@ private:
 	float						m_MoveScale; 
 	Ogre::Degree				m_RotScale;
 
+	double						m_timeSinceLastFrame; // Animation scale
+
 private:
 
 	Ogre::TerrainGroup* m_pTerrainGroup;

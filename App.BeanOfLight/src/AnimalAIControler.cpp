@@ -59,7 +59,7 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 			return;
 		else
 		{
-			m_pAnimal->turn(animalToHero.normalisedCopy());
+			m_pAnimal->turn(animalToHero.normalisedCopy(), i_timeSinceLastFrame);
 			m_pAnimal->moveOnTerrain(1, 0, true, i_timeSinceLastFrame, *m_pTerrainGroup);
 		}
 	}
@@ -71,7 +71,7 @@ void AnimalAIControler::move(double i_timeSinceLastFrame)
 			return;
 		else
 		{
-			m_pAnimal->turn(animalToWaypoint.normalisedCopy());
+			m_pAnimal->turn(animalToWaypoint.normalisedCopy(), i_timeSinceLastFrame);
 			m_pAnimal->moveOnTerrain(1, 0, false, i_timeSinceLastFrame, *m_pTerrainGroup);
 		}
 	}

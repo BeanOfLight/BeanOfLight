@@ -17,8 +17,8 @@ public:
 	void detach();
 
 	// Change state
-	void alignAnimalToCamera(); // Adjust avatar orientation to face forward in camera view
-	void orient(int i_xRel, int i_yRel);
+	void alignAnimalToCamera(double i_timeSinceLastFrame); // Adjust avatar orientation to face forward in camera view
+	void orient(int i_xRel, int i_yRel, double i_timeSinceLastFrame);
 	void move(int i_frontDir, int i_sideDir, bool i_run, double i_timeSinceLastFrame);
 
 public:

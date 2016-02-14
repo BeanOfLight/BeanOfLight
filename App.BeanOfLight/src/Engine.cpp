@@ -29,6 +29,8 @@ OgreFramework::OgreFramework()
 
     m_pTrayMgr          = 0;
     m_FrameEvent        = Ogre::FrameEvent();
+
+	m_timeSinceLastFrame = 0.f;
 }
 
 bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListener, OIS::MouseListener *pMouseListener)
@@ -126,7 +128,7 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	// Create Avatar & third person controler
 	m_pAvatar = AnimalFactory::createHeroBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(6400, 0.f, 5400),
+		Ogre::Vector3(6400, 90.f, 5400),
 		Ogre::Quaternion::IDENTITY,
 		Ogre::String("MyAvatar"));
 	m_pAvatarControler = new AnimalThirdPersonControler();
@@ -136,7 +138,7 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	// Create a peon & AI controler
 	m_pPeon = AnimalFactory::createPeonBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(5000, 0.f, -4000),
+		Ogre::Vector3(5000, 85.f, -4000),
 		Ogre::Quaternion::IDENTITY,
 		Ogre::String("Peon1"));
 	m_pPeonControler = new AnimalAIControler();
@@ -221,7 +223,7 @@ bool OgreFramework::keyReleased(const OIS::KeyEvent &keyEventRef)
 
 bool OgreFramework::mouseMoved(const OIS::MouseEvent &evt)
 {
-	m_pAvatarControler->orient(evt.state.X.rel, evt.state.Y.rel);
+	m_pAvatarControler->orient(evt.state.X.rel, evt.state.Y.rel, m_timeSinceLastFrame);
 
 	return true;
 }
@@ -240,15 +242,19 @@ bool OgreFramework::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID
 
 void OgreFramework::updateOgre(double timeSinceLastFrame)
 {
+	m_timeSinceLastFrame = timeSinceLastFrame;
+	// Do not go under 10PFS
+	m_timeSinceLastFrame = std::min(m_timeSinceLastFrame, 100.);
+
     m_MoveScale = m_MoveSpeed   * (float)timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * (float)timeSinceLastFrame;
 
     m_TranslateVector = Vector3::ZERO;
 
-	m_pPeonControler->move(timeSinceLastFrame);
-	moveAvatar(timeSinceLastFrame);
+	m_pPeonControler->move(m_timeSinceLastFrame);
+	moveAvatar(m_timeSinceLastFrame);
 
-    m_FrameEvent.timeSinceLastFrame = timeSinceLastFrame;
+    m_FrameEvent.timeSinceLastFrame = m_timeSinceLastFrame;
     m_pTrayMgr->frameRenderingQueued(m_FrameEvent);
 }
 

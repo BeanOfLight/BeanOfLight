@@ -44,7 +44,7 @@ void AnimalThirdPersonControler::detach()
 	m_pCamera = nullptr;
 }
 
-void AnimalThirdPersonControler::alignAnimalToCamera()
+void AnimalThirdPersonControler::alignAnimalToCamera(double i_timeSinceLastFrame)
 {
 	if (!(m_pAnimal != nullptr && m_pCamera != nullptr))
 		return;
@@ -57,7 +57,7 @@ void AnimalThirdPersonControler::alignAnimalToCamera()
 	if (newAniX.isZeroLength())
 		return;
 	newAniX.normalise();
-	m_pAnimal->turn(newAniX);
+	m_pAnimal->turn(newAniX, i_timeSinceLastFrame);
 }
 
 void AnimalThirdPersonControler::move(int i_frontDir, int i_sideDir, bool i_run, double i_timeSinceLastFrame)
@@ -78,7 +78,7 @@ void AnimalThirdPersonControler::move(int i_frontDir, int i_sideDir, bool i_run,
 	m_pCamera->lookAt(newAniPos);
 }
 
-void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel)
+void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel, double i_timeSinceLastFrame)
 {
 	if (!(m_pAnimal != nullptr && m_pCamera != nullptr))
 		return;
@@ -109,5 +109,5 @@ void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel)
 	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition());
 
 	if (!m_lookAround)
-		alignAnimalToCamera();
+		alignAnimalToCamera(i_timeSinceLastFrame);
 }
