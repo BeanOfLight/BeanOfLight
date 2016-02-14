@@ -4,48 +4,34 @@
 #include <OgreSceneNode.h>
 #include <Terrain/OgreTerrainGroup.h>
 
-// Avatar is a object in the scene controlled by the player
-// 
-class AvatarControler
+#include "Animal.h"
+
+// Class enables player to control an animal in 3rd person view
+class AnimalThirdPersonControler
 {
 public:
-	AvatarControler();
-	~AvatarControler();
+	AnimalThirdPersonControler();
+	~AnimalThirdPersonControler();
 
-	void attachAvatar(Ogre::SceneNode* i_pAvatar, float i_heightOffset);
-	void detachAvatar();
-
-	void attachCamera(Ogre::Camera* i_pCamera, float i_heightOffset); // Avatar must be attached first
-	void detachCamera();
-
-	void attachTerrain(Ogre::TerrainGroup* i_pTerrainGroup);
-	void detachTerrain();
+	void attach(Animal* i_pAnimal, Ogre::Camera* i_pCamera, float i_camHeightOffset, Ogre::TerrainGroup* i_pTerrainGroup);
+	void detach();
 
 	// Change state
-	void alignAvatarToCamera(); // Adjust avatar orientation to face forward in camera view
+	void alignAnimalToCamera(); // Adjust avatar orientation to face forward in camera view
 	void orient(int i_xRel, int i_yRel);
-	void move(int i_frontDir, int i_sideDir, double i_timeSinceLastFrame, bool i_run);
+	void move(int i_frontDir, int i_sideDir, bool i_run, double i_timeSinceLastFrame);
 
 public:
-	// States
 	bool m_lookAround; // avatar does not rotate on orient
-
-	// Properties
-	float m_waklSpeed; // walk speed in cm/s
-	float m_runSpeed;  // run speed in cm/s	
-	float m_camDistance; // camera distance in cm
-	float m_angularSpeed; 
 
 private:
 
-	Ogre::Vector3 m_collideWithTerrain(const Ogre::Vector3& i_pos, float i_offset, bool i_stick);
-
-
-	Ogre::Camera* m_pCamera;
-	float m_cameraHeightOffset;
-	Ogre::SceneNode* m_pAvatar;
-	float m_avatarHeightOffset;
 	Ogre::TerrainGroup* m_pTerrainGroup;
-
+	Ogre::Camera* m_pCamera;
+	float m_camAngularSpeed;
+	float m_camDistance;
+	float m_camHeightOffset;
+	
+	Animal* m_pAnimal;
 };
 

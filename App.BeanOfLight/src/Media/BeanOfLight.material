@@ -1,21 +1,27 @@
-material BeanOfLight/Avatar
+material BeanOfLight/HeroBlue
 {
 	technique
 	{
 		pass
 		{
-		    lighting on
-			#polygon_mode  wireframe
-			
 			shading phong
 			ambient 0.0 0.25 0.50
             diffuse 0.0 0.1 0.2
-			#specular 0.5 0.5 0.5 5.0
-			
-			#texture_unit
-			#{
-			#	texture checker.png
-			#}
+			specular 0.5 0.5 0.5 5.0
+		}
+	}
+}
+
+material BeanOfLight/PeonYellow
+{
+	technique
+	{
+		pass
+		{
+			shading phong
+			ambient 0.5 0.4 0.1
+            diffuse 0.5 0.4 0.1
+			specular 0.5 0.5 0.5 5.0
 		}
 	}
 }

@@ -9,7 +9,7 @@
 void addLine(
 	Ogre::Vector3 i_start,
 	Ogre::Vector3 i_end,
-	Ogre::String& i_material,
+	const Ogre::String& i_material,
 	Ogre::ManualObject& io_object)
 {
 	io_object.begin(i_material, Ogre::RenderOperation::OT_LINE_LIST);
@@ -28,7 +28,7 @@ void addQuad(
 	const Ogre::Vector3& i_normal,
 	size_t i_nRows,
 	size_t i_nCols,
-	Ogre::String& i_material,
+	const Ogre::String& i_material,
 	Ogre::ManualObject& io_object)
 {
 	assert(i_clockwiseQuad.size() == 4);
@@ -94,7 +94,7 @@ void addQuad(
 Ogre::ManualObject* ProceduralShape::createCube(
 	Ogre::SceneManager* i_pSceneMngr, 
 	Ogre::SceneNode* i_pParent, 
-	Ogre::String& i_name,
+	const Ogre::String& i_name,
 	float i_size)
 {
 	// create ManualObject
@@ -157,13 +157,14 @@ Ogre::ManualObject* ProceduralShape::createCube(
 Ogre::ManualObject* ProceduralShape::createAvatar(
 	Ogre::SceneManager* i_pSceneMngr,
 	Ogre::SceneNode* i_pParent,
-	Ogre::String& i_name,
+	const Ogre::String& i_name,
 	float i_height,
 	float i_width,
 	float i_depth,
 	float i_sameHeight,
 	float i_seamWidth,
-	float i_resolution)
+	float i_resolution,
+	const Ogre::String& i_material)
 {
 	// create ManualObject
 	Ogre::ManualObject* manual = i_pSceneMngr->createManualObject(i_name);
@@ -208,9 +209,9 @@ Ogre::ManualObject* ProceduralShape::createAvatar(
 			std::vector<Ogre::Vector3> clockwiseQuad{
 				p[q[f][iq][0]], p[q[f][iq][1]], p[q[f][iq][2]], p[q[f][iq][3]] };
 			
-			size_t nCols = ceil((clockwiseQuad[0] - clockwiseQuad[1]).length() / i_resolution);
-			size_t nRows = ceil((clockwiseQuad[0] - clockwiseQuad[3]).length() / i_resolution);
-			addQuad(clockwiseQuad, n[f], nRows, nCols, Ogre::String("BeanOfLight/Avatar"), *manual);
+			size_t nCols = (size_t)ceil((clockwiseQuad[0] - clockwiseQuad[1]).length() / i_resolution);
+			size_t nRows = (size_t)ceil((clockwiseQuad[0] - clockwiseQuad[3]).length() / i_resolution);
+			addQuad(clockwiseQuad, n[f], nRows, nCols, i_material, *manual);
 		}
 	}
 

@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-#include "ProceduralShape.h"
+#include "AnimalFactory.h"
 
 using namespace Ogre;
 
@@ -63,23 +63,11 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
     m_pViewport->setCamera(m_pCamera);
 
 	// Create Avatar
-	m_pAvatar = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
-	float avatarHeightOffset = 90.f;
-	m_pAvatar->setPosition(6400, avatarHeightOffset, 5400);
-	m_pAvatar->pitch(Ogre::Degree(-90));
-	m_pAvatar->roll(Ogre::Degree(90));
-	ProceduralShape::createAvatar(
+	m_pAvatar = AnimalFactory::createHeroBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		m_pAvatar,
-		Ogre::String("MyAvatar"),
-		180.f, 70.f, 40.f, 60.f, 10.f, 10.f);
-
-	ProceduralShape::createCS(
-		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		m_pAvatar,
-		Ogre::String("MyAvatarCS"),
-		Ogre::Vector3::ZERO,
-		150.f);
+		Ogre::Vector3(6400, 90, 5400),
+		Ogre::Quaternion::IDENTITY,
+		Ogre::String("MyAvatar"));
 
     size_t hWnd = 0;
     OIS::ParamList paramList;
@@ -140,20 +128,10 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 
 	// Initialize Terrain
 	TerrainCreator terrain;
-	mTerrainGroup = terrain.initTerrain(*m_pSceneMgr);
+	m_pTerrainGroup = terrain.initTerrain(*m_pSceneMgr);
 
-	m_pAvatarControler = new AvatarControler();
-	m_pAvatarControler->attachAvatar(m_pAvatar, avatarHeightOffset);
-	m_pAvatarControler->attachCamera(m_pCamera, avatarHeightOffset);
-	m_pAvatarControler->attachTerrain(mTerrainGroup);
-	m_pAvatarControler->alignAvatarToCamera();
-
-	ProceduralShape::createCS(
-		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode(),
-		Ogre::String("WorldCS"),
-		Ogre::Vector3::ZERO,
-		6000.f);
+	m_pAvatarControler = new AnimalThirdPersonControler();
+	m_pAvatarControler->attach(m_pAvatar, m_pCamera, 90.f, m_pTerrainGroup);
 
     return true;
 }
@@ -164,6 +142,7 @@ OgreFramework::~OgreFramework()
     if (m_pTrayMgr)  delete m_pTrayMgr;
     if (m_pRoot)     delete m_pRoot;
 	if (m_pAvatarControler)   delete m_pAvatarControler;
+	if (m_pAvatar)   delete m_pAvatar;
 }
 
 bool OgreFramework::keyPressed(const OIS::KeyEvent &keyEventRef)
@@ -276,5 +255,5 @@ void OgreFramework::moveAvatar(double i_timeSinceLastFrame)
 	if (m_pKeyboard->isKeyDown(OIS::KC_LSHIFT))
 		run = true;
 
-	m_pAvatarControler->move(moveForward, straffe, i_timeSinceLastFrame, run);
+	m_pAvatarControler->move(moveForward, straffe, run, i_timeSinceLastFrame);
 }

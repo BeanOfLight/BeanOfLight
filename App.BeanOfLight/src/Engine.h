@@ -52,8 +52,8 @@ public:
 	OIS::Keyboard*				m_pKeyboard;
 	OIS::Mouse*					m_pMouse;    
 
-	Ogre::SceneNode*			m_pAvatar;
-	AvatarControler*			m_pAvatarControler;
+	Animal*						m_pAvatar;
+	AnimalThirdPersonControler*	m_pAvatarControler;
 
 private:
 	OgreFramework(const OgreFramework&);
@@ -73,6 +73,6 @@ private:
 
 private:
 
-	Ogre::TerrainGroup* mTerrainGroup;
+	Ogre::TerrainGroup* m_pTerrainGroup;
 	OgreBites::Label* mInfoLabel;
 };
