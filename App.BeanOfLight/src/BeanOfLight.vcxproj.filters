@@ -16,6 +16,9 @@
     <ClCompile Include="ProceduralShape.cpp">
       <Filter>Procedural</Filter>
     </ClCompile>
+    <ClCompile Include="AvatarControler.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -29,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="ProceduralShape.h">
       <Filter>Procedural</Filter>
+    </ClInclude>
+    <ClInclude Include="AvatarControler.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

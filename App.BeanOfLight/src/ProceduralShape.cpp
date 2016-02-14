@@ -5,6 +5,19 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper Functions
+
+void addLine(
+	Ogre::Vector3 i_start,
+	Ogre::Vector3 i_end,
+	Ogre::String& i_material,
+	Ogre::ManualObject& io_object)
+{
+	io_object.begin(i_material, Ogre::RenderOperation::OT_LINE_LIST);
+	io_object.position(i_start.x, i_start.y, i_start.z);
+	io_object.position(i_end.x, i_end.y, i_end.z);
+	io_object.end();
+}
+
 //   0--1
 //   | /|
 //   |/ |
@@ -122,7 +135,7 @@ Ogre::ManualObject* ProceduralShape::createCube(
 	{
 		std::vector<Ogre::Vector3> clockwiseQuad{
 			p[q[i][0]], p[q[i][1]], p[q[i][2]], p[q[i][3]] };
-		addQuad(clockwiseQuad, n[i], 10, 10, Ogre::String("BeanOfLight/Blue"), *manual);
+		addQuad(clockwiseQuad, n[i], 10, 10, Ogre::String("BeanOfLight/Avatar"), *manual);
 	}
 
 	i_pParent->attachObject(manual);
@@ -197,9 +210,27 @@ Ogre::ManualObject* ProceduralShape::createAvatar(
 			
 			size_t nCols = ceil((clockwiseQuad[0] - clockwiseQuad[1]).length() / i_resolution);
 			size_t nRows = ceil((clockwiseQuad[0] - clockwiseQuad[3]).length() / i_resolution);
-			addQuad(clockwiseQuad, n[f], nRows, nCols, Ogre::String("BeanOfLight/Blue"), *manual);
+			addQuad(clockwiseQuad, n[f], nRows, nCols, Ogre::String("BeanOfLight/Avatar"), *manual);
 		}
 	}
+
+	i_pParent->attachObject(manual);
+
+	return manual;
+}
+
+Ogre::ManualObject* ProceduralShape::createCS(
+	Ogre::SceneManager* i_pSceneMngr,
+	Ogre::SceneNode* i_pParent,
+	const Ogre::String& i_name,
+	const Ogre::Vector3& i_origin,
+	float size)
+{
+	Ogre::ManualObject* manual = i_pSceneMngr->createManualObject(i_name);
+
+	addLine(i_origin, i_origin + size * Ogre::Vector3::UNIT_X, Ogre::String("BeanOfLight/LitRed"), *manual);
+	addLine(i_origin, i_origin + size * Ogre::Vector3::UNIT_Y, Ogre::String("BeanOfLight/LitGreen"), *manual);
+	addLine(i_origin, i_origin + size * Ogre::Vector3::UNIT_Z, Ogre::String("BeanOfLight/LitBlue"), *manual);
 
 	i_pParent->attachObject(manual);
 

@@ -186,7 +186,7 @@ void TerrainCreator::configureTerrainDefaults(Ogre::SceneManager& i_sceneManager
 	importData.maxBatchSize = 129;
 
 	importData.layerList.resize(3);
-	importData.layerList[0].worldSize = 200;
+	importData.layerList[0].worldSize = 400;
 	importData.layerList[0].textureNames.push_back(
 		"grass_green-01_diffusespecular.dds");
 	importData.layerList[0].textureNames.push_back(
@@ -196,7 +196,7 @@ void TerrainCreator::configureTerrainDefaults(Ogre::SceneManager& i_sceneManager
 		"dirt_grayrocky_diffusespecular.dds");
 	importData.layerList[1].textureNames.push_back(
 		"dirt_grayrocky_normalheight.dds");
-	importData.layerList[2].worldSize = 200;
+	importData.layerList[2].worldSize = 800;
 	importData.layerList[2].textureNames.push_back(
 		"snow_1024.jpg");
 	importData.layerList[2].textureNames.push_back(

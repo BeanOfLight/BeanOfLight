@@ -1,4 +1,4 @@
-material BeanOfLight/Blue
+material BeanOfLight/Avatar
 {
 	technique
 	{
@@ -20,4 +20,36 @@ material BeanOfLight/Blue
 	}
 }
 
+material BeanOfLight/LitRed
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.0 0.0 0.0
+		}
+	}
+}
+
+material BeanOfLight/LitGreen
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.0 1.0 0.0
+		}
+	}
+}
+
+material BeanOfLight/LitBlue
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.0 0.0 1.0
+		}
+	}
+}
 

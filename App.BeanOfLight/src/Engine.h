@@ -19,6 +19,7 @@
 #include <SdkTrays.h>
 
 #include "TerrainCreator.h"
+#include "AvatarControler.h"
 
 class OgreFramework : public Ogre::Singleton<OgreFramework>, OIS::KeyListener, OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -28,8 +29,7 @@ public:
 
 	bool initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListener = 0, OIS::MouseListener *pMouseListener = 0);
 	void updateOgre(double timeSinceLastFrame);
-	void moveCamera();
-	void getInput();
+	void moveAvatar(double timeSinceLastFrame);
 
 	bool isOgreToBeShutDown()const{return m_bShutDownOgre;}  
 
@@ -48,10 +48,12 @@ public:
 	Ogre::Log*					m_pLog;
 	Ogre::Timer*				m_pTimer;
     Ogre::OverlaySystem*        m_pOverlaySystem;
-	
 	OIS::InputManager*			m_pInputMgr;
 	OIS::Keyboard*				m_pKeyboard;
 	OIS::Mouse*					m_pMouse;    
+
+	Ogre::SceneNode*			m_pAvatar;
+	AvatarControler*			m_pAvatarControler;
 
 private:
 	OgreFramework(const OgreFramework&);

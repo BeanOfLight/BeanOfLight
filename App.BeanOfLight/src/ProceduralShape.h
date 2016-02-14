@@ -22,6 +22,13 @@ public:
 		float i_sameHeight,
 		float i_seamWidth,
 		float i_resolution);
+
+	static Ogre::ManualObject* createCS(
+		Ogre::SceneManager* i_pSceneMngr,
+		Ogre::SceneNode* i_pParent,
+		const Ogre::String& i_name,
+		const Ogre::Vector3& i_origin,
+		float size);
 };
 
 

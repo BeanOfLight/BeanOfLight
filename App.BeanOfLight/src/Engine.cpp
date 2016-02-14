@@ -1,4 +1,7 @@
 #include "Engine.h"
+
+#include "ProceduralShape.h"
+
 using namespace Ogre;
 
 template<> OgreFramework* Ogre::Singleton<OgreFramework>::msSingleton = 0;
@@ -15,6 +18,7 @@ OgreFramework::OgreFramework()
     m_pSceneMgr			= 0;
     m_pRenderWnd		= 0;
     m_pCamera			= 0;
+	m_pAvatar           = 0;
     m_pViewport			= 0;
     m_pLog				= 0;
     m_pTimer			= 0;
@@ -57,6 +61,25 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
     m_pCamera->setAspectRatio(Real(m_pViewport->getActualWidth()) / Real(m_pViewport->getActualHeight()));
 
     m_pViewport->setCamera(m_pCamera);
+
+	// Create Avatar
+	m_pAvatar = OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode()->createChildSceneNode();
+	float avatarHeightOffset = 90.f;
+	m_pAvatar->setPosition(6400, avatarHeightOffset, 5400);
+	m_pAvatar->pitch(Ogre::Degree(-90));
+	m_pAvatar->roll(Ogre::Degree(90));
+	ProceduralShape::createAvatar(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		m_pAvatar,
+		Ogre::String("MyAvatar"),
+		180.f, 70.f, 40.f, 60.f, 10.f, 10.f);
+
+	ProceduralShape::createCS(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		m_pAvatar,
+		Ogre::String("MyAvatarCS"),
+		Ogre::Vector3::ZERO,
+		150.f);
 
     size_t hWnd = 0;
     OIS::ParamList paramList;
@@ -119,14 +142,28 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	TerrainCreator terrain;
 	mTerrainGroup = terrain.initTerrain(*m_pSceneMgr);
 
+	m_pAvatarControler = new AvatarControler();
+	m_pAvatarControler->attachAvatar(m_pAvatar, avatarHeightOffset);
+	m_pAvatarControler->attachCamera(m_pCamera);
+	m_pAvatarControler->attachTerrain(mTerrainGroup);
+	m_pAvatarControler->alignAvatarToCamera();
+
+	ProceduralShape::createCS(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		OgreFramework::getSingletonPtr()->m_pSceneMgr->getRootSceneNode(),
+		Ogre::String("WorldCS"),
+		Ogre::Vector3::ZERO,
+		6000.f);
+
     return true;
 }
 
 OgreFramework::~OgreFramework()
 {
-    if(m_pInputMgr) OIS::InputManager::destroyInputSystem(m_pInputMgr);
-    if(m_pTrayMgr)  delete m_pTrayMgr;
-    if(m_pRoot)     delete m_pRoot;
+    if (m_pInputMgr) OIS::InputManager::destroyInputSystem(m_pInputMgr);
+    if (m_pTrayMgr)  delete m_pTrayMgr;
+    if (m_pRoot)     delete m_pRoot;
+	if (m_pAvatarControler)   delete m_pAvatarControler;
 }
 
 bool OgreFramework::keyPressed(const OIS::KeyEvent &keyEventRef)
@@ -188,20 +225,24 @@ bool OgreFramework::keyReleased(const OIS::KeyEvent &keyEventRef)
 
 bool OgreFramework::mouseMoved(const OIS::MouseEvent &evt)
 {
-    m_pCamera->yaw(Degree(evt.state.X.rel * -0.1f));
-    m_pCamera->pitch(Degree(evt.state.Y.rel * -0.1f));
+	//m_pCamera->yaw(Degree(evt.state.X.rel * -0.1f));
+	//m_pCamera->pitch(Degree(evt.state.Y.rel * -0.1f));
 
-    return true;
+	m_pAvatarControler->orient(evt.state.X.rel, evt.state.Y.rel);
+
+	return true;
 }
 
 bool OgreFramework::mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-    return true;
+	m_pAvatarControler->m_lookAround = true;
+	return true;
 }
 
 bool OgreFramework::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-    return true;
+	m_pAvatarControler->m_lookAround = false;
+	return true;
 }
 
 void OgreFramework::updateOgre(double timeSinceLastFrame)
@@ -211,45 +252,45 @@ void OgreFramework::updateOgre(double timeSinceLastFrame)
 
     m_TranslateVector = Vector3::ZERO;
 
-    getInput();
-    moveCamera();
+	moveAvatar(timeSinceLastFrame);
 
     m_FrameEvent.timeSinceLastFrame = timeSinceLastFrame;
     m_pTrayMgr->frameRenderingQueued(m_FrameEvent);
 }
 
-void OgreFramework::moveCamera()
+void OgreFramework::moveAvatar(double i_timeSinceLastFrame)
 {
-	if(m_pKeyboard->isKeyDown(OIS::KC_LSHIFT))
-        m_pCamera->moveRelative(m_TranslateVector);
-    else
-        m_pCamera->moveRelative(m_TranslateVector / 3);
+	int moveForward = 0;
+	int straffe = 0;
+
+	if (m_pKeyboard->isKeyDown(OIS::KC_A))
+		straffe = 1;
+
+	if (m_pKeyboard->isKeyDown(OIS::KC_D))
+		straffe = -1;
+
+	if (m_pKeyboard->isKeyDown(OIS::KC_W))
+		moveForward = 1;
+
+	if (m_pKeyboard->isKeyDown(OIS::KC_S))
+		moveForward = -1;
+	
+	bool run = false;
+	if (m_pKeyboard->isKeyDown(OIS::KC_LSHIFT))
+		run = true;
+
+	m_pAvatarControler->move(moveForward, straffe, i_timeSinceLastFrame, run);
 
 	setCameraOnTerrain();
 }
 
-void OgreFramework::getInput()
-{
-    if(m_pKeyboard->isKeyDown(OIS::KC_A))
-        m_TranslateVector.x = -m_MoveScale;
-
-    if(m_pKeyboard->isKeyDown(OIS::KC_D))
-        m_TranslateVector.x = m_MoveScale;
-
-    if(m_pKeyboard->isKeyDown(OIS::KC_W))
-        m_TranslateVector.z = -m_MoveScale;
-
-    if(m_pKeyboard->isKeyDown(OIS::KC_S))
-        m_TranslateVector.z = m_MoveScale;
-}
-
 void OgreFramework::setCameraOnTerrain()
 {
-	Ogre::Vector3 camPos = m_pCamera->getPosition();
-	Ogre::Ray cameraRay(Ogre::Vector3(camPos.x, 5000.0f, camPos.z), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::TerrainGroup::RayResult rayResult = mTerrainGroup->rayIntersects(cameraRay);
-	if (rayResult.hit)
-	{
-		m_pCamera->setPosition(camPos.x, rayResult.position.y + 150.0f, camPos.z);
-	}
+	//Ogre::Vector3 camPos = m_pCamera->getPosition();
+	//Ogre::Ray cameraRay(Ogre::Vector3(camPos.x, 5000.0f, camPos.z), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	//Ogre::TerrainGroup::RayResult rayResult = mTerrainGroup->rayIntersects(cameraRay);
+	//if (rayResult.hit)
+	//{
+	//	m_pCamera->setPosition(camPos.x, rayResult.position.y + 150.0f, camPos.z);
+	//}
 }
