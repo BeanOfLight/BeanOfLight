@@ -107,11 +107,14 @@ void AvatarControler::move(int i_frontDir, int i_sideDir, double i_timeSinceLast
 	}
 
 	Ogre::Vector3 moveDir = (avaX + avaY).normalisedCopy();
-	float speed = i_run ? m_runSpeed : m_waklSpeed;
+	float speedFactor = (i_run ? m_runSpeed : m_waklSpeed) * (float)i_timeSinceLastFrame / 1000.f;
 	
 	Ogre::Vector3 oldAvaPos = m_pAvatar->getPosition();
-	Ogre::Vector3 newAvaPos = oldAvaPos + moveDir * speed * (float) i_timeSinceLastFrame / 1000.f;
+	Ogre::Vector3 newAvaPos = oldAvaPos + moveDir * speedFactor;
 	newAvaPos = m_collideWithTerrain(newAvaPos, m_avatarHeightOffset, true);
+	
+	// Adjust speed for slope
+	newAvaPos = oldAvaPos + (newAvaPos - oldAvaPos).normalisedCopy() * speedFactor;
 	m_pAvatar->setPosition(newAvaPos);
 
 	Ogre::Vector3 newCamPos = m_pCamera->getPosition() + newAvaPos - oldAvaPos;
