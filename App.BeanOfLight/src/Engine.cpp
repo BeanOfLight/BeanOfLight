@@ -62,20 +62,6 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 
     m_pViewport->setCamera(m_pCamera);
 
-	// Create Avatar
-	m_pAvatar = AnimalFactory::createHeroBean(
-		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(6400, 70, 5400),
-		Ogre::Quaternion::IDENTITY,
-		Ogre::String("MyAvatar"));
-
-	// Create a peon
-	m_pPeon = AnimalFactory::createPeonBean(
-		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(5000, 70, 4000),
-		Ogre::Quaternion::IDENTITY,
-		Ogre::String("Peon1"));
-
     size_t hWnd = 0;
     OIS::ParamList paramList;
     m_pRenderWnd->getCustomAttribute("WINDOW", &hWnd);
@@ -137,8 +123,31 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	TerrainCreator terrain;
 	m_pTerrainGroup = terrain.initTerrain(*m_pSceneMgr);
 
+	// Create Avatar & third person controler
+	m_pAvatar = AnimalFactory::createHeroBean(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		Ogre::Vector3(6400, 0.f, 5400),
+		Ogre::Quaternion::IDENTITY,
+		Ogre::String("MyAvatar"));
 	m_pAvatarControler = new AnimalThirdPersonControler();
-	m_pAvatarControler->attach(m_pAvatar, m_pCamera, 90.f, m_pTerrainGroup);
+	m_pAvatarControler->attach(m_pAvatar, m_pCamera, m_pTerrainGroup);
+
+
+	// Create a peon & AI controler
+	m_pPeon = AnimalFactory::createPeonBean(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		Ogre::Vector3(5000, 0.f, -4000),
+		Ogre::Quaternion::IDENTITY,
+		Ogre::String("Peon1"));
+	m_pPeonControler = new AnimalAIControler();
+	m_pPeonControler->attach(m_pPeon, m_pAvatar, m_pTerrainGroup);
+	std::vector<Ogre::Vector3> w{
+		Ogre::Vector3(0.f, 0.f, 0.f),
+		Ogre::Vector3(0.f, 0.f, -12800.f),
+		Ogre::Vector3(12800.f, 0.f, -12800.f),
+		Ogre::Vector3(12800.f, 0.f, 0.f)
+	};
+	m_pPeonControler->setWayPoints(w);
 
     return true;
 }
@@ -236,6 +245,7 @@ void OgreFramework::updateOgre(double timeSinceLastFrame)
 
     m_TranslateVector = Vector3::ZERO;
 
+	m_pPeonControler->move(timeSinceLastFrame);
 	moveAvatar(timeSinceLastFrame);
 
     m_FrameEvent.timeSinceLastFrame = timeSinceLastFrame;

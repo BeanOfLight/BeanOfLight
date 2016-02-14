@@ -50,10 +50,10 @@ Animal* AnimalFactory::createPeonBean(
 {
 	Animal* pPeon = new Animal();
 
-	pPeon->m_heightOffset = 70.f;
+	pPeon->m_heightOffset = 85.f;
 	pPeon->m_stuckToTerrain = true;
 	pPeon->m_maxWaklSpeed = walkSpeed * 0.8f;
-	pPeon->m_maxRunSpeed = walkSpeed * runFactor * 0.8f;
+	pPeon->m_maxRunSpeed = walkSpeed * runFactor * 0.5f;
 	pPeon->m_maxTurnSpeed = 0.f;
 
 	pPeon->m_pNode = i_pSceneManager->getRootSceneNode()->createChildSceneNode();

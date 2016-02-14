@@ -12,7 +12,8 @@ AnimalThirdPersonControler::AnimalThirdPersonControler()
 	m_camAngularSpeed(0.0015f),
 	m_camHeightOffset(0.f),
 	m_pCamera(nullptr),
-	m_pAnimal(nullptr)
+	m_pAnimal(nullptr),
+	m_pTerrainGroup(nullptr)
 {
 
 }
@@ -22,12 +23,12 @@ AnimalThirdPersonControler::~AnimalThirdPersonControler()
 
 }
 
-void AnimalThirdPersonControler::attach(Animal* i_pAnimal, Ogre::Camera* i_pCamera, float i_heightOffset, Ogre::TerrainGroup* i_pTerrainGroup)
+void AnimalThirdPersonControler::attach(Animal* i_pAnimal, Ogre::Camera* i_pCamera, Ogre::TerrainGroup* i_pTerrainGroup)
 {
 	m_pAnimal = i_pAnimal;
 	m_pCamera = i_pCamera;
 	m_pTerrainGroup = i_pTerrainGroup;
-	m_camHeightOffset = i_heightOffset;
+	m_camHeightOffset = i_pAnimal->m_heightOffset;
 
 	if (!(m_pAnimal != nullptr && m_pCamera != nullptr))
 		return;

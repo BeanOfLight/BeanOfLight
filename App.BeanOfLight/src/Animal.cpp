@@ -48,7 +48,7 @@ void Animal::moveOnTerrain(int i_moveForward, int i_straffeLeft, bool i_run, dou
 
 void Animal::turn(Ogre::Vector3 i_newXDir)
 {
-	Ogre::Vector3 x = m_pNode->getOrientation().xAxis();
 	Ogre::Vector3 z = m_pNode->getOrientation().zAxis();
-	m_pNode->setOrientation(Ogre::Quaternion(i_newXDir, z.crossProduct(i_newXDir), z));
+	Ogre::Vector3 newX = Ogre::Vector3(i_newXDir.x, 0.f, i_newXDir.z).normalisedCopy();
+	m_pNode->setOrientation(Ogre::Quaternion(newX, z.crossProduct(newX), z));
 }

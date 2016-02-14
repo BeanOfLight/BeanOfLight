@@ -13,7 +13,7 @@ public:
 	AnimalThirdPersonControler();
 	~AnimalThirdPersonControler();
 
-	void attach(Animal* i_pAnimal, Ogre::Camera* i_pCamera, float i_camHeightOffset, Ogre::TerrainGroup* i_pTerrainGroup);
+	void attach(Animal* i_pAnimal, Ogre::Camera* i_pCamera, Ogre::TerrainGroup* i_pTerrainGroup);
 	void detach();
 
 	// Change state

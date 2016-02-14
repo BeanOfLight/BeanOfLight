@@ -7,48 +7,58 @@
     <ClCompile Include="main.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainCreator.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralShape.cpp">
       <Filter>Procedural</Filter>
     </ClCompile>
     <ClCompile Include="Animal.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Animals</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp" />
     <ClCompile Include="AnimalFactory.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainUtils.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Animals</Filter>
     </ClCompile>
     <ClCompile Include="AnimalThirdPersonControler.cpp">
+      <Filter>Animals</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainCreator.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainUtils.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimalAIControler.cpp">
+      <Filter>Animals</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainCreator.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="ProceduralShape.h">
       <Filter>Procedural</Filter>
     </ClInclude>
     <ClInclude Include="Animal.h">
-      <Filter>Engine</Filter>
+      <Filter>Animals</Filter>
     </ClInclude>
-    <ClInclude Include="App.h" />
     <ClInclude Include="AnimalFactory.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainUtils.h">
-      <Filter>Engine</Filter>
+      <Filter>Animals</Filter>
     </ClInclude>
     <ClInclude Include="AnimalThirdPersonControler.h">
+      <Filter>Animals</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainCreator.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainUtils.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimalAIControler.h">
+      <Filter>Animals</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +98,12 @@
     </Filter>
     <Filter Include="Resources\Media">
       <UniqueIdentifier>{9ab10030-2ce0-431a-8a93-965474dac873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animals">
+      <UniqueIdentifier>{cce31715-0eab-4285-b1ad-74f9cd3c78a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{5fa66459-6ee4-4034-b96a-3f77baea85b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

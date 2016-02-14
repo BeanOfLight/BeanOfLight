@@ -194,12 +194,12 @@ Ogre::ManualObject* ProceduralShape::createAvatar(
 	};
 
 	std::vector<Ogre::Vector3> n{
-		Ogre::Vector3(0.f, 0.f, -1.f),
+		Ogre::Vector3(0.f, 0.f, 0.f),
 		Ogre::Vector3(0.f, 1.f, 0.f),
 		Ogre::Vector3(0.f, 0.f, 1.f),
 		Ogre::Vector3(0.f, -1.f, 0.f),
 		Ogre::Vector3(1.f, 0.f, 0.f),
-		Ogre::Vector3(-1.f, 0.f, 0.f),
+		Ogre::Vector3(-1.f, 0.f, 0.f)
 	};
 
 	for (size_t f = 0; f < q.size(); f++) // for each face

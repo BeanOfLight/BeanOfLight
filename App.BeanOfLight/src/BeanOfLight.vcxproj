@@ -119,6 +119,7 @@ xcopy /s /i /y /q .\Media $(outdir)..\Media</Command>
   <ItemGroup>
     <ClCompile Include="Animal.cpp" />
     <ClCompile Include="AnimalFactory.cpp" />
+    <ClCompile Include="AnimalAIControler.cpp" />
     <ClCompile Include="App.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -142,6 +143,7 @@ xcopy /s /i /y /q .\Media $(outdir)..\Media</Command>
   <ItemGroup>
     <ClInclude Include="Animal.h" />
     <ClInclude Include="AnimalFactory.h" />
+    <ClInclude Include="AnimalAIControler.h" />
     <ClInclude Include="App.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
