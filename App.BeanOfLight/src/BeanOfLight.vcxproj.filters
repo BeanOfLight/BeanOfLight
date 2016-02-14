@@ -13,9 +13,6 @@
     <ClCompile Include="ProceduralShape.cpp">
       <Filter>Procedural</Filter>
     </ClCompile>
-    <ClCompile Include="AvatarControler.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Animal.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -24,6 +21,9 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="TerrainUtils.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimalThirdPersonControler.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -37,9 +37,6 @@
     <ClInclude Include="ProceduralShape.h">
       <Filter>Procedural</Filter>
     </ClInclude>
-    <ClInclude Include="AvatarControler.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Animal.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -48,6 +45,9 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="TerrainUtils.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimalThirdPersonControler.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>

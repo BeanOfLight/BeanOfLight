@@ -1,4 +1,4 @@
-#include "AvatarControler.h"
+#include "AnimalThirdPersonControler.h"
 
 #include <OgreMath.h>
 

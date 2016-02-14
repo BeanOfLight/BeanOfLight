@@ -19,7 +19,7 @@
 #include <SdkTrays.h>
 
 #include "TerrainCreator.h"
-#include "AvatarControler.h"
+#include "AnimalThirdPersonControler.h"
 
 class OgreFramework : public Ogre::Singleton<OgreFramework>, OIS::KeyListener, OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -54,6 +54,8 @@ public:
 
 	Animal*						m_pAvatar;
 	AnimalThirdPersonControler*	m_pAvatarControler;
+
+	Animal*						m_pPeon;
 
 private:
 	OgreFramework(const OgreFramework&);

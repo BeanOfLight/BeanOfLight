@@ -65,9 +65,16 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 	// Create Avatar
 	m_pAvatar = AnimalFactory::createHeroBean(
 		OgreFramework::getSingletonPtr()->m_pSceneMgr,
-		Ogre::Vector3(6400, 90, 5400),
+		Ogre::Vector3(6400, 70, 5400),
 		Ogre::Quaternion::IDENTITY,
 		Ogre::String("MyAvatar"));
+
+	// Create a peon
+	m_pPeon = AnimalFactory::createPeonBean(
+		OgreFramework::getSingletonPtr()->m_pSceneMgr,
+		Ogre::Vector3(5000, 70, 4000),
+		Ogre::Quaternion::IDENTITY,
+		Ogre::String("Peon1"));
 
     size_t hWnd = 0;
     OIS::ParamList paramList;
@@ -143,6 +150,7 @@ OgreFramework::~OgreFramework()
     if (m_pRoot)     delete m_pRoot;
 	if (m_pAvatarControler)   delete m_pAvatarControler;
 	if (m_pAvatar)   delete m_pAvatar;
+	if (m_pPeon)     delete m_pPeon;
 }
 
 bool OgreFramework::keyPressed(const OIS::KeyEvent &keyEventRef)
