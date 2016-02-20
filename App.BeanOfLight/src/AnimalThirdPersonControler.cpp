@@ -37,7 +37,7 @@ void AnimalThirdPersonControler::attach(Animal* i_pAnimal, Ogre::Camera* i_pCame
 
 	// Position camera
 	m_pCamera->setPosition(m_pAnimal->m_pNode->getPosition() - m_camDistance * m_pAnimal->m_pNode->getOrientation().xAxis());
-	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition() );
+	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition() + m_pAnimal->m_cameraLookAtOffset);
 
 }
 
@@ -133,5 +133,5 @@ void AnimalThirdPersonControler::m_collideCamWithTerrain(const Ogre::Vector3& i_
 	}
 
 	m_pCamera->setPosition(newCamPos);
-	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition());
+	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition() + m_pAnimal->m_cameraLookAtOffset);
 }

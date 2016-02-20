@@ -33,6 +33,8 @@ Animal* AnimalFactory::createHeroBean(
 		180.f, 70.f, 40.f, 60.f, 10.f, 10.f,
 		Ogre::String("BeanOfLight/HeroBlue"));
 
+	pHero->m_cameraLookAtOffset = Ogre::Vector3(0.f, 150.f, 0.f);
+
 	ProceduralShape::createCS(
 		i_pSceneManager,
 		pHero->m_pNode,

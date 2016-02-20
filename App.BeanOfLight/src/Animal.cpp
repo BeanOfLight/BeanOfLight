@@ -4,6 +4,7 @@
 
 Animal::Animal()
 {
+	m_cameraLookAtOffset = Ogre::Vector3::ZERO;
 }
 
 

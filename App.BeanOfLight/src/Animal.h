@@ -34,5 +34,7 @@ public:
 	float m_maxWaklSpeed; // walk speed in cm/s
 	float m_maxRunSpeed;  // run speed in cm/s	
 	float m_maxTurnSpeed; // turn speed in radians/s
+
+	Ogre::Vector3 m_cameraLookAtOffset; // point for the camera to focus 
 };
 
