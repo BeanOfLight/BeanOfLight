@@ -1,5 +1,3 @@
-//|||||||||||||||||||||||||||||||||||||||||||||||
-
 #include "TerrainCreator.h"
 #include <OgreMemoryAllocatorConfig.h>
 
@@ -12,9 +10,6 @@ TerrainCreator::~TerrainCreator()
 {
 
 }
-
-//|||||||||||||||||||||||||||||||||||||||||||||||
-
 
 Ogre::TerrainGroup* TerrainCreator::initTerrain(Ogre::SceneManager& i_sceneManager)
 {
@@ -32,7 +27,7 @@ Ogre::TerrainGroup* TerrainCreator::initTerrain(Ogre::SceneManager& i_sceneManag
 	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(
 		&i_sceneManager,
 		Ogre::Terrain::ALIGN_X_Z,
-		257, 12800.0);
+		129, 12800.0);
 	mTerrainGroup->setFilenameConvention(Ogre::String("terrain"), Ogre::String("dat"));
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
@@ -179,7 +174,7 @@ void TerrainCreator::configureTerrainDefaults(Ogre::SceneManager& i_sceneManager
 	mTerrainGlobals->setCompositeMapAmbient(i_sceneManager.getAmbientLight());
 	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 	Ogre::Terrain::ImportData& importData = mTerrainGroup->getDefaultImportSettings();
-	importData.terrainSize = 257;
+	importData.terrainSize = 129;
 	importData.worldSize = 12800.0;
 	importData.inputScale = 100.0;
 	importData.minBatchSize = 65;

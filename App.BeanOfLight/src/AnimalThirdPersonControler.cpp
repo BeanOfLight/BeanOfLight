@@ -74,10 +74,14 @@ void AnimalThirdPersonControler::move(int i_frontDir, int i_sideDir, bool i_run,
 		m_pAnimal->moveOnTerrain(i_frontDir, i_sideDir, i_run, i_timeSinceLastFrame, *m_pTerrainGroup);
 		Ogre::Vector3 newAniPos = m_pAnimal->m_pNode->getPosition();
 
+		// Update cammera
 		Ogre::Vector3 newCamPos = m_pCamera->getPosition() + newAniPos - oldAniPos;
-		newCamPos = collideWithTerrain(newCamPos, m_camHeightOffset, false, *m_pTerrainGroup);
-		m_pCamera->setPosition(newCamPos);
-		m_pCamera->lookAt(newAniPos);
+		Ogre::Vector3 newAvatarToCamera = newCamPos - m_pAnimal->m_pNode->getPosition();
+		if (newAvatarToCamera.length() != m_camDistance)
+			newAvatarToCamera = newAvatarToCamera.normalisedCopy() * m_camDistance;
+		// Collide with terrain
+		m_collideCamWithTerrain(newAvatarToCamera);
+
 	}
 
 	if (!m_lookAround)
@@ -108,9 +112,26 @@ void AnimalThirdPersonControler::orient(int i_xRel, int i_yRel, double i_timeSin
 		angleY = Ogre::Radian(0.f);
 
 	Ogre::Quaternion orient = Ogre::Quaternion(angleY, m_pCamera->getOrientation().xAxis()) * Ogre::Quaternion(angleX, m_pCamera->getOrientation().yAxis());
-	
-	Ogre::Vector3 newCamPos = m_pAnimal->m_pNode->getPosition() + orient * avatarToCamera;
-	newCamPos = collideWithTerrain(newCamPos, m_camHeightOffset, false, *m_pTerrainGroup);
+	Ogre::Vector3 newAvatarToCamera = orient * avatarToCamera;
+
+	// Move camera closer if collides with terrain
+	m_collideCamWithTerrain(newAvatarToCamera);
+}
+
+void AnimalThirdPersonControler::m_collideCamWithTerrain(const Ogre::Vector3& i_avatarToCamera)
+{
+	// Move camera closer if collides with terrain
+	Ogre::Vector3 colPos, newCamPos;
+	if (rayToTerrain(m_pAnimal->m_pNode->getPosition(), i_avatarToCamera, *m_pTerrainGroup, colPos) &&
+		((m_pAnimal->m_pNode->getPosition() - colPos).length() < m_camDistance + m_camHeightOffset))
+	{
+		newCamPos = colPos - i_avatarToCamera.normalisedCopy() * m_camHeightOffset;
+	}
+	else
+	{
+		newCamPos = m_pAnimal->m_pNode->getPosition() + i_avatarToCamera;
+	}
+
 	m_pCamera->setPosition(newCamPos);
 	m_pCamera->lookAt(m_pAnimal->m_pNode->getPosition());
 }

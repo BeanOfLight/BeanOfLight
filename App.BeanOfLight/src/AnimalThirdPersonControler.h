@@ -26,6 +26,8 @@ public:
 
 private:
 
+	void m_collideCamWithTerrain(const Ogre::Vector3& i_avatarToCamera);
+
 	Ogre::TerrainGroup* m_pTerrainGroup;
 	Ogre::Camera* m_pCamera;
 	float m_camAngularSpeed;

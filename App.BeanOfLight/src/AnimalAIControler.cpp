@@ -42,7 +42,7 @@ void AnimalAIControler::setWayPoints(std::vector<Ogre::Vector3> i_wayPoints)
 	m_wayPoints.resize(i_wayPoints.size());
 	for (size_t i = 0; i < i_wayPoints.size(); ++i)
 	{
-		m_wayPoints[i] = collideWithTerrain(i_wayPoints[i], m_pAnimal->m_heightOffset, true, *m_pTerrainGroup);
+		m_wayPoints[i] = getTerrainPoint(i_wayPoints[i], m_pAnimal->m_heightOffset, true, *m_pTerrainGroup);
 	}
 }
 
