@@ -65,22 +65,17 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
 
     m_pViewport = m_pRenderWnd->addViewport(m_pCamera);
     m_pViewport->setBackgroundColour(ColourValue(0.8f, 0.7f, 0.6f, 1.0f));
-
     m_pCamera->setAspectRatio(Real(m_pViewport->getActualWidth()) / Real(m_pViewport->getActualHeight()));
-
     m_pViewport->setCamera(m_pCamera);
 
     size_t hWnd = 0;
     OIS::ParamList paramList;
     m_pRenderWnd->getCustomAttribute("WINDOW", &hWnd);
-
     paramList.insert(OIS::ParamList::value_type("WINDOW", Ogre::StringConverter::toString(hWnd)));
 
     m_pInputMgr = OIS::InputManager::createInputSystem(paramList);
-
     m_pKeyboard = static_cast<OIS::Keyboard*>(m_pInputMgr->createInputObject(OIS::OISKeyboard, true));
     m_pMouse = static_cast<OIS::Mouse*>(m_pInputMgr->createInputObject(OIS::OISMouse, true));
-
     m_pMouse->getMouseState().height = m_pRenderWnd->getHeight();
     m_pMouse->getMouseState().width	 = m_pRenderWnd->getWidth();
 
@@ -126,10 +121,26 @@ bool OgreFramework::initOgre(Ogre::String wndTitle, OIS::KeyListener *pKeyListen
     m_pTrayMgr->hideCursor();
 
     m_pRenderWnd->setActive(true);
+	//m_pSceneMgr->setFog(FOG_EXP, ColourValue(0.7, 0.7, 0.8), 0.0001, 4000, 10000);
 
 	// Initialize Terrain
 	TerrainCreator terrain;
 	m_pTerrainGroup = terrain.initTerrain(*m_pSceneMgr);
+
+	// Create paging system
+	m_pPageManager = OGRE_NEW PageManager();
+	// Since we're not loading any pages from .page files, we need a way just 
+	// to say we've loaded them without them actually being loaded
+	m_pPageManager->setPageProvider(&mDummyPageProvider);
+	m_pPageManager->addCamera(m_pCamera);
+	m_pPageManager->setDebugDisplayLevel(0);
+	m_pTerrainPaging = OGRE_NEW TerrainPaging(m_pPageManager);
+	m_pPagedWorld = m_pPageManager->createWorld();
+	m_pTerrainPagedWorldSection = m_pTerrainPaging->createWorldSection(m_pPagedWorld, m_pTerrainGroup, 6400, 3*12800,
+		-300, -300,
+		300, 300,
+		Ogre::String("Toto"), 100);
+	m_pTerrainPagedWorldSection->setDefiner(OGRE_NEW SimpleTerrainDefiner);
 
 	// Create Avatar & third person controler
 	m_pAvatar = AnimalFactory::createHeroBean(
@@ -185,6 +196,7 @@ OgreFramework::~OgreFramework()
 	if (m_pAvatarControler)   delete m_pAvatarControler;
 	if (m_pAvatar)   delete m_pAvatar;
 	if (m_pPeon)     delete m_pPeon;
+	if (m_pGuard)    delete m_pGuard;
 }
 
 bool OgreFramework::keyPressed(const OIS::KeyEvent &keyEventRef)
@@ -266,9 +278,8 @@ bool OgreFramework::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID
 void OgreFramework::updateOgre(double timeSinceLastFrame)
 {
 	m_timeSinceLastFrame = timeSinceLastFrame;
-	// Do not go under 10PFS
-	m_timeSinceLastFrame = std::min(m_timeSinceLastFrame, 100.);
-
+	
+	m_timeSinceLastFrame = std::min(m_timeSinceLastFrame, 100.); // Do not go under 10PFS
     m_MoveScale = m_MoveSpeed   * (float)timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * (float)timeSinceLastFrame;
 
@@ -277,6 +288,7 @@ void OgreFramework::updateOgre(double timeSinceLastFrame)
 	m_pPeonControler->move(m_timeSinceLastFrame);
 	m_pGuardControler->move(m_timeSinceLastFrame);
 	moveAvatar(m_timeSinceLastFrame);
+	m_pTerrainGroup->autoUpdateLodAll(false, Any(Real(12800.0)));
 
     m_FrameEvent.timeSinceLastFrame = m_timeSinceLastFrame;
     m_pTrayMgr->frameRenderingQueued(m_FrameEvent);

@@ -8,7 +8,7 @@ Ogre::Vector3 getTerrainPoint(
 {
 	Ogre::Vector3 collide = i_pos;
 	bool hit = rayToTerrain(
-		Ogre::Vector3(i_pos.x, 5000.0f, i_pos.z),
+		Ogre::Vector3(i_pos.x, 15000.0f, i_pos.z),
 		Ogre::Vector3::NEGATIVE_UNIT_Y,
 		i_terrain,
 		collide);

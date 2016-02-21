@@ -2,6 +2,8 @@
 #include <OgreMemoryAllocatorConfig.h>
 
 TerrainCreator::TerrainCreator()
+	: m_terrainSize(1025),
+	m_terrainWorldSize(5*12800.0)
 {
 
 }
@@ -27,53 +29,55 @@ Ogre::TerrainGroup* TerrainCreator::initTerrain(Ogre::SceneManager& i_sceneManag
 	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(
 		&i_sceneManager,
 		Ogre::Terrain::ALIGN_X_Z,
-		129, 12800.0);
+		m_terrainSize, m_terrainWorldSize);
 	mTerrainGroup->setFilenameConvention(Ogre::String("terrain"), Ogre::String("dat"));
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+	// mTerrainGroup->setAutoUpdateLod(Ogre::TerrainAutoUpdateLodFactory::getAutoUpdateLod(Ogre::TerrainAutoUpdateLodStrategy::BY_DISTANCE));
 
 	configureTerrainDefaults(i_sceneManager, light);
 
-	for (long x = 0; x <= 1; ++x)
-		for (long y = 0; y <= 1; ++y)
-			defineTerrain(x, y);
+	//for (long x = 0; x <= 5; ++x)
+	//	for (long y = 0; y <= 5; ++y)
+	//		defineTerrain(x, y);
 
-	mTerrainGroup->loadAllTerrains(true);
+	//mTerrainGroup->loadAllTerrains(true);
 
-	if (mTerrainsImported)
-	{
-		Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
-
-		while (ti.hasMoreElements())
-		{
-			Ogre::Terrain* t = ti.getNext()->instance;
-			initBlendMaps(t);
-		}
-	}
+	//if (mTerrainsImported)
+	//{
+	//	Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
+	//	while (ti.hasMoreElements())
+	//	{
+	//		Ogre::Terrain* t = ti.getNext()->instance;
+	//		initBlendMaps(t);
+	//	}
+	//}
 
 	return mTerrainGroup;
 }
 
-void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
+void getTerrainImage(Ogre::uint32 i_size, Ogre::Image& img)
 {
 	// Placeholder for terrain procedural generator
-	// Generate a 128x128 
+	// Generate a i_size x i_size
+
+	float hfSize = (float)i_size/2.f;
 	
-	float* image = OGRE_ALLOC_T(float, 128 * 128, Ogre::MEMCATEGORY_GENERAL);
-	float height = Ogre::Math::RangeRandom(15.f, 35.f);
-	for (int i = 0; i < 128; i++)
+	float* image = OGRE_ALLOC_T(float, i_size * i_size, Ogre::MEMCATEGORY_GENERAL);
+	float height = Ogre::Math::RangeRandom(15.f, 5*35.f);
+	for (Ogre::uint32 i = 0; i < i_size; i++)
 	{
-		for (int j = 0; j < 128; j++)
+		for (Ogre::uint32  j = 0; j < i_size; j++)
 		{
-			float distFromCenter = (float)sqrt(abs(64 - i)*abs(64 - i) + abs(64 - j) * abs(64 - j));
-			float f = std::max(64 - distFromCenter, 0.f) / 64.f;
-			image[i * 128 + j] = f * f * (2 - f * f) * height;
+			float distFromCenter = (float)sqrt(abs(hfSize - i)*abs(hfSize - i) + abs(hfSize - j) * abs(hfSize - j));
+			float f = std::max(hfSize - distFromCenter, 0.f) / hfSize;
+			image[i * i_size + j] = f * f * (2 - f * f) * height;
 		}
 	}
 
 
 	img.loadDynamicImage((Ogre::uchar*)image,
-		128,
-		128,
+		i_size,
+		i_size,
 		1,
 		Ogre::PF_FLOAT32_R,
 		true);
@@ -92,7 +96,7 @@ void TerrainCreator::defineTerrain(long x, long y)
 	else
 	{
 		Ogre::Image img;
-		getTerrainImage(x % 2 != 0, y % 2 != 0, img);
+		getTerrainImage(m_terrainSize, img);
 		mTerrainGroup->defineTerrain(x, y, &img);
 
 		mTerrainsImported = true;
@@ -169,16 +173,16 @@ void TerrainCreator::initBlendMaps(Ogre::Terrain* terrain)
 void TerrainCreator::configureTerrainDefaults(Ogre::SceneManager& i_sceneManager, Ogre::Light* light)
 {
 	mTerrainGlobals->setMaxPixelError(8);
-	mTerrainGlobals->setCompositeMapDistance(12800);
+	mTerrainGlobals->setCompositeMapDistance(m_terrainWorldSize);
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
 	mTerrainGlobals->setCompositeMapAmbient(i_sceneManager.getAmbientLight());
 	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 	Ogre::Terrain::ImportData& importData = mTerrainGroup->getDefaultImportSettings();
-	importData.terrainSize = 129;
-	importData.worldSize = 12800.0;
+	importData.terrainSize = m_terrainSize;
+	importData.worldSize = m_terrainWorldSize;
 	importData.inputScale = 100.0;
-	importData.minBatchSize = 65;
-	importData.maxBatchSize = 129;
+	importData.minBatchSize = 9;
+	importData.maxBatchSize = 65;
 
 	importData.layerList.resize(3);
 	importData.layerList[0].worldSize = 400;
@@ -196,4 +200,13 @@ void TerrainCreator::configureTerrainDefaults(Ogre::SceneManager& i_sceneManager
 		"snow_1024.jpg");
 	importData.layerList[2].textureNames.push_back(
 		"dirt_grayrocky_normalheight.dds");
+}
+
+//-----------------------------------------------------------------------------
+
+void SimpleTerrainDefiner::define(Ogre::TerrainGroup* i_pTerrainGroup, long x, long y)
+{
+	Ogre::Image img;
+	getTerrainImage(129, img);
+	i_pTerrainGroup->defineTerrain(x, y, &img);
 }

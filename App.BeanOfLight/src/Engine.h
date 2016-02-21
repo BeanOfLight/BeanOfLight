@@ -18,6 +18,9 @@
 
 #include <SdkTrays.h>
 
+#include <Paging/OgrePageManager.h>
+#include <Terrain/OgreTerrainPaging.h>
+
 #include "TerrainCreator.h"
 #include "AnimalThirdPersonControler.h"
 #include "AnimalAIControler.h"
@@ -83,5 +86,21 @@ private:
 private:
 
 	Ogre::TerrainGroup* m_pTerrainGroup;
+	Ogre::TerrainPaging* m_pTerrainPaging;
+	Ogre::PageManager* m_pPageManager;
+	Ogre::PagedWorld* m_pPagedWorld;
+	Ogre::TerrainPagedWorldSection* m_pTerrainPagedWorldSection;
+
 	OgreBites::Label* mInfoLabel;
+
+	/// This class just pretends to provide procedural page content to avoid page loading
+	class DummyPageProvider : public Ogre::PageProvider
+	{
+	public:
+		bool prepareProceduralPage(Ogre::Page* page, Ogre::PagedWorldSection* section) { return true; }
+		bool loadProceduralPage(Ogre::Page* page, Ogre::PagedWorldSection* section) { return true; }
+		bool unloadProceduralPage(Ogre::Page* page, Ogre::PagedWorldSection* section) { return true; }
+		bool unprepareProceduralPage(Ogre::Page* page, Ogre::PagedWorldSection* section) { return true; }
+	};
+	DummyPageProvider mDummyPageProvider;
 };
